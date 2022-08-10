@@ -109,7 +109,7 @@ const GroupOrder = () => {
       price: product.price,
       discount: product.discount,
       productName: product.title,
-      sendId: user.userId,
+      imageUrl: product.image_url,
     };
     sendAddRequest(orderItem);
   };
@@ -137,6 +137,7 @@ const GroupOrder = () => {
                 <th>Title</th>
                 <th>Price</th>
                 <th>Description</th>
+                <th>Image</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -146,6 +147,8 @@ const GroupOrder = () => {
                 <td>{product.title}</td>
                 <td>{product.price}</td>
                 <td>{product.description}</td>
+                <img src={product.image_url} alt="Product" width="200px" />
+                {/* <td>{product.image_url}</td> */}
                 <td>
                   <input type="number" id={'quantity-' + index} />
                   <button
@@ -177,6 +180,7 @@ const GroupOrder = () => {
               <th>STT</th>
               <th>Title</th>
               <th>Username</th>
+              <th>Image</th>
               <th>Price</th>
               <th>Quantity</th>
               <th>Total</th>
@@ -189,6 +193,7 @@ const GroupOrder = () => {
                   <td>{index}</td>
                   <td>{orderItem.productName}</td>
                   <td>{orderItem.username}</td>
+                  <img src={orderItem.imageUrl} alt="Product" width="200px" />
                   <td>{orderItem.price}</td>
                   <td>{orderItem.quantity}</td>
                   <td>{orderItem.total}</td>
@@ -232,7 +237,9 @@ const GroupOrder = () => {
         name="Link"
         onChange={(e) => setLink(e.target.value)}
       />
-      <button className="btn btn-primary" onClick={connect}>Connect</button>
+      <button className="btn btn-primary" onClick={connect}>
+        Connect
+      </button>
       <br />
       <button onClick={handleGetLink}>Get Link</button>
       <button onClick={handleOrder}>Order</button>
