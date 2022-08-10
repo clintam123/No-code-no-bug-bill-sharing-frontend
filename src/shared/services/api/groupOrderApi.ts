@@ -7,6 +7,11 @@ const getProductGroup = async (vendor_id: any) => {
   return response;
 };
 
+const getVendor = async (vendor_id: any) => {
+  const response = await client.get('vendor/' + vendor_id);
+  return response;
+};
+
 const getLink = async (userId: number, vendorId: number) => {
   const response = await client.post('group-order/get-group-link', {
     userId,
@@ -28,5 +33,5 @@ const checkLinkExist = async (link: any) => {
   return response.data.status;
 };
 
-const obj = { getLink, sendOrder, checkLinkExist, getProductGroup };
+const obj = { getLink, sendOrder, checkLinkExist, getProductGroup, getVendor };
 export default obj;
