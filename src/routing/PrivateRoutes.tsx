@@ -68,17 +68,16 @@ const PrivateRoutes = () => {
       case USER_ROLE.CUSTOMER:
         return (
           <Routes>
-            <Route path="/" element={<GroupOrder />}>
-              <Route path="group-order" element={<GroupOrder />} />
-            </Route>
+            <Route path="/group-order" element={<GroupOrder />} />
+            <Route path="/home" element={<HomePage />} />
           </Routes>
         );
-      default:
-        return (
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
-        );
+      //   default:
+      //     return (
+      //       <Routes>
+      //         <Route path="/" element={<HomePage />} />
+      //       </Routes>
+      //     );
     }
   };
   return (
