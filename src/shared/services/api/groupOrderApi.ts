@@ -2,7 +2,7 @@ import client from '.';
 
 const getProductGroup = async (vendor_id: any) => {
   const response = await client.get(
-    'product-group/vendor/' + vendor_id + '?page=0&page_size=3'
+    'product-group/vendor/' + vendor_id + '?page=0&page_size=100'
   );
   return response;
 };

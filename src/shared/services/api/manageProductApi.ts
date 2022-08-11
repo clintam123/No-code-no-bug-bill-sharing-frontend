@@ -31,29 +31,26 @@ export const getProductGroupByCategoryApi = async (param: any) => {
 export const postProductGroupApi = async (param: any) => {
     try {
         const res = await client.post('product-group', param);
-        notify('success', 'Group Product', 'Create successfully!')
+        // notify('success', 'Group Product', 'Create successfully!')
         return res.data
     } catch (error) {
-        notify('error', 'Group Product', 'Create failed!')
+        console.log(error);
+        // notify('error', 'Group Product', 'Create failed!')
     }
 }
 
 export const putProductGroupApi = async (param: any) => {
     try {
         const res = await client.put(`product-group/${param.id}`, param.data);
-        notify('success', 'Group Product', 'Update successfully!')
         return res.data
     } catch (error) {
-        notify('error', 'Group Product', 'Update failed!')
     }
 }
 
-export const deleteProductGroupApi = async (param: any) => {
+export const deleteProductGroupApi = async (id: any) => {
     try {
-        const res = await client.put(`product-group/${param.id}`, param.data);
-        notify('success', 'Group Product', 'Update successfully!')
+        const res = await client.delete(`product-group/${id}`);
         return res.data
     } catch (error) {
-        notify('error', 'Group Product', 'Update failed!')
     }
 }

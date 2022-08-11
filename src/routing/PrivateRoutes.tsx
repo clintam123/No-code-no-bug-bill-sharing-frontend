@@ -2,9 +2,11 @@ import React, { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import UserDetail from '../modules/admin/pages/manageUser/UserDetail';
+import Login from '../modules/auth/component/Login';
 import Profile from '../modules/auth/component/Profile';
 import CustomerHomePage from '../modules/customer/pages/CustomerHomePage';
 import GroupOrder from '../modules/customer/pages/groupOrder/GroupOrder.js';
+import CategoryPage from '../modules/public/CategoryPage';
 import HomePage from '../modules/public/HomePage';
 import ManageProduct from '../modules/vendor/pages/manageProduct/ManageProduct';
 import VendorHomePage from '../modules/vendor/pages/VendorHomePage';
@@ -69,15 +71,16 @@ const PrivateRoutes = () => {
         return (
           <Routes>
             <Route path="" element={<HomePage />} />
+            <Route path="/category" element={<CategoryPage />} />
             <Route path="/group-order" element={<GroupOrder />} />
           </Routes>
         );
-      // default:
-      //   return (
-      //     <Routes>
-      //       <Route path="/" element={<HomePage />} />
-      //     </Routes>
-      //   );
+      default:
+        return (
+          <Routes>
+            <Route path="/" element={<Login />} />
+          </Routes>
+        );
     }
   };
   return (
