@@ -24,8 +24,7 @@ const VendorHomePage = () => {
     getProductGroups();
     getCategories();
     getVendor();
-      
-  }, []);
+  }, [productGroup]);
 
   const getProductGroups = async () => {
     try {
@@ -49,8 +48,6 @@ const VendorHomePage = () => {
     try {
       const data = await getAllCategoryApi();
       setCategories(data.data);
-      console.log(data.data);
-      console.log(categories);
     } catch (err) {
       console.log(err);
     }
@@ -58,16 +55,43 @@ const VendorHomePage = () => {
 
   const displayVendor = (vendor) => {
     const vendorInfo = (
-      <div>
-        <div>{vendor.intro}</div>
-        <div>{vendor.profile}</div>
-        <div>
-          {vendor.address + " " + vendor.district + " " + vendor.province}
+      <div className="container-xxl">
+        <div className="row mt-5">
+          <div className="card mb-3">
+            <img src={vendor.logo} alt="Logo" />
+            <div className="card-body ml-5">
+              <div className="row">
+                <div className="col ml-5">
+                  <h5 className="card-title">{vendor.intro}</h5>
+                  <p className="card-text">
+                    🏠 Địa chỉ:
+                    {vendor.address +
+                      ' ' +
+                      vendor.district +
+                      ' ' +
+                      vendor.province}
+                  </p>
+                  <p className="card-text">🌎 13km</p>
+                  <p className="card-text">📞 Số điện thoại: {vendor.phone}</p>
+                  <p className="card-text">
+                    ⌚ Thời gian mở cửa: {vendor.opening_time}
+                  </p>
+                  <p className="card-text">
+                    ⏱️ Thời gian đóng cửa: {vendor.closing_time}
+                  </p>
+                </div>
+                <div className="col mt-5">
+                  <p className="card-text mt-5">
+                    🔗 https://loship.vn/trungnguyenlegendcoffeenhachung
+                  </p>
+                  <p className="card-text">
+                    🏠 Xem chi nhánh khác tại Trung Nguyên Legend Coffee
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>{vendor.phone}</div>
-        <img src={vendor.logo} alt="Logo" width="200px" />
-        <div>{vendor.opening_time}</div>
-        <div>{vendor.closing_time}</div>
       </div>
     );
     return vendorInfo;
@@ -81,8 +105,7 @@ const VendorHomePage = () => {
       vendor_id: vendorId,
     };
     const data = await postProductGroupApi(param);
-    console.log(data);
-    setProductGroup([...productG]);
+    getProductGroups();
   };
 
   const addProductGroup = () => {
@@ -113,7 +136,6 @@ const VendorHomePage = () => {
       },
     };
     const data = putProductGroupApi(param);
-    console.log(data);
     getProductGroups();
   };
 
@@ -121,13 +143,14 @@ const VendorHomePage = () => {
     const updateForm = (
       <div>
         <form
-          onSubmit={(event) =>
+          onSubmit={(event) => {
+            event.preventDefault();
             handleUpdateProductGroup(
               productGroupId,
               event.target.name.value,
               event.target.description.value
             )
-          }
+          }}
         >
           Name:
           <input type="text" name="name" className="form-control" /> <br />
@@ -148,7 +171,10 @@ const VendorHomePage = () => {
       <div>
         <button
           className="btn btn-primary"
-          onClick={() => deleteProductGroupApi(productGroupId)}
+          onClick={() => {
+            deleteProductGroupApi(productGroupId);
+            getProductGroups();
+          }}
         >
           Delete product group
         </button>
@@ -158,7 +184,7 @@ const VendorHomePage = () => {
 
   const handleAddProduct = (
     productGroupId,
-    name,
+    title,
     description,
     price,
     discount,
@@ -166,7 +192,7 @@ const VendorHomePage = () => {
     categoryId
   ) => {
     const param = {
-      name,
+      title,
       description,
       price,
       discount,
@@ -184,32 +210,34 @@ const VendorHomePage = () => {
     return (
       <div>
         <form
-          onSubmit={(event) =>
+          onSubmit={(event) => {
+
+            event.preventDefault();
             handleAddProduct(
               productGroupId,
-              event.target.name.value,
+              event.target.title.value,
               event.target.description.value,
               event.target.price.value,
               event.target.discount.value,
               event.target.quantity.value,
               event.target.category.value
             )
-          }
+          }}
         >
-          Name:
+          Title:
           <input type="text" name="title" className="form-control" />
           <br />
           Description:
           <input type="text" name="description" className="form-control" />
           <br />
           Price:
-          <input type="text" name="price" className="form-control" />
+          <input type="number" name="price" className="form-control" />
           <br />
           Discount:
-          <input type="text" name="discount" className="form-control" />
+          <input type="number" name="discount" className="form-control" />
           <br />
           Quantity:
-          <input type="text" name="quantity" className="form-control" />
+          <input type="number" name="quantity" className="form-control" />
           <br />
           Category:
           <select name="category">
@@ -228,17 +256,18 @@ const VendorHomePage = () => {
   const handleUpdateProduct = (
     productId,
     productGroupId,
-    name,
+    title,
     description,
     price,
     discount,
     quantity,
     categoryId
   ) => {
+    console.log(productId);
     const param = {
       id: productId,
       data: {
-        name,
+        title,
         description,
         price,
         discount,
@@ -253,15 +282,16 @@ const VendorHomePage = () => {
     getProductGroups();
   };
 
-  const updateProduct = (productGroupId, productId) => {
+  const updateProduct = (productId, productGroupId) => {
     return (
       <div>
         <form
-          onSubmit={(event) =>
+          onSubmit={(event) => {
+            event.preventDefault();
             handleUpdateProduct(
               productId,
               productGroupId,
-              event.target.name.value,
+              event.target.title.value,
               event.target.description.value,
               event.target.price.value,
               event.target.discount.value,
@@ -269,30 +299,31 @@ const VendorHomePage = () => {
               event.target.category.value
             )
           }
+          }
         >
-          Name:
+          Title:
           <input type="text" name="title" className="form-control" />
           <br />
           Description:
           <input type="text" name="description" className="form-control" />
           <br />
           Price:
-          <input type="text" name="price" className="form-control" />
+          <input type="number" name="price" className="form-control" />
           <br />
           Discount:
-          <input type="text" name="discount" className="form-control" />
+          <input type="number" name="discount" className="form-control" />
           <br />
           Quantity:
-          <input type="text" name="quantity" className="form-control" />
+          <input type="number" name="quantity" className="form-control" />
           <br />
           Category:
           <select name="category">
             {categories && categories.map((category) => (
-              <option value={category.id}>{category}</option>
+              <option value={category.id}>{category.title}</option>
             ))}
           </select>
           <button type="submit" className="btn btn-primary">
-            update product 
+            update product
           </button>
         </form>
       </div>
@@ -304,9 +335,12 @@ const VendorHomePage = () => {
       <div>
         <button
           className="btn btn-primary"
-          onClick={deleteProductApi(productId)}
+          onClick={() => {
+            deleteProductApi(productId);
+            getProductGroups();
+          }}
         >
-          Delete product 
+          Delete product
         </button>
       </div>
     );
@@ -417,12 +451,15 @@ const VendorHomePage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr key={index}>
+              <tr>
                 <td>{index + 1}</td>
                 <td>{product.title}</td>
                 <td>{product.price}</td>
-                <td>{product.description}</td>'
+                <td>{product.description}</td>
+                <td>sku: {product.sku}</td>
+                <td>discount: {product.quantity}</td>
                 <img src={product.image_url} alt="Product" width="200px" />
+                <p>Product id: {product.id}</p>
                 {updateProduct(product.id, productGroup.id)}
                 {deleteProduct(product.id, productGroup.id)}
               </tr>
@@ -438,7 +475,13 @@ const VendorHomePage = () => {
     <div>
       <div>VendorHomePage123</div>
       {vendor != null && displayVendor(vendor)}
-      {displayProductGroups(productGroup)}
+
+      <div className="container">
+        <div className="row">
+            {displayProductGroups(productGroup)}
+        </div>
+      </div>
+      
       {addProductGroup()}
     </div>
   );
