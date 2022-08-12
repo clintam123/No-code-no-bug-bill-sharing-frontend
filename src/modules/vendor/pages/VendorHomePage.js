@@ -3,6 +3,9 @@ import { useSelector } from "react-redux";
 import groupOrderService from "../../../shared/services/api/groupOrderApi";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import $ from "jquery";
+import Popper from "popper.js";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import {
   addProductApi,
   deleteProductApi,
@@ -24,7 +27,7 @@ const VendorHomePage = () => {
     getProductGroups();
     getCategories();
     getVendor();
-  }, [productGroup]);
+  }, []);
 
   const getProductGroups = async () => {
     try {
@@ -66,9 +69,9 @@ const VendorHomePage = () => {
                   <p className="card-text">
                     🏠 Địa chỉ:
                     {vendor.address +
-                      ' ' +
+                      " " +
                       vendor.district +
-                      ' ' +
+                      " " +
                       vendor.province}
                   </p>
                   <p className="card-text">🌎 13km</p>
@@ -105,22 +108,78 @@ const VendorHomePage = () => {
       vendor_id: vendorId,
     };
     const data = await postProductGroupApi(param);
-    getProductGroups();
+    // setProductGroup(data)
+    window.location.reload();
   };
 
   const addProductGroup = () => {
     const addForm = (
       <div>
-        <form onSubmit={handleAddProductGroup}>
-          Name:
-          <input type="text" name="name" className="form-control" /> <br />
-          Description:
-          <input type="text" name="description" className="form-control" />
-          <br />
-          <button type="submit" className="btn btn-primary">
-            them product group
-          </button>
-        </form>
+        <button
+          type="button"
+          class="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          Them
+        </button>
+
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Modal title
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form onSubmit={handleAddProductGroup}>
+                  Name:
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control"
+                  />{" "}
+                  <br />
+                  Description:
+                  <input
+                    type="text"
+                    name="description"
+                    className="form-control"
+                  />
+                  <br />
+                  <button type="submit" className="btn btn-success">
+                    them product group
+                  </button>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" class="btn btn-success">
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
     return addForm;
@@ -136,7 +195,8 @@ const VendorHomePage = () => {
       },
     };
     const data = putProductGroupApi(param);
-    getProductGroups();
+    // getProductGroups();
+    window.location.reload();
   };
 
   const updateProductGroup = (productGroupId) => {
@@ -149,7 +209,7 @@ const VendorHomePage = () => {
               productGroupId,
               event.target.name.value,
               event.target.description.value
-            )
+            );
           }}
         >
           Name:
@@ -157,7 +217,7 @@ const VendorHomePage = () => {
           Description:
           <input type="text" name="description" className="form-control" />
           <br />
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-success">
             update product group
           </button>
         </form>
@@ -170,10 +230,10 @@ const VendorHomePage = () => {
     return (
       <div>
         <button
-          className="btn btn-primary"
+          className="btn btn-success"
           onClick={() => {
             deleteProductGroupApi(productGroupId);
-            getProductGroups();
+            window.location.reload();
           }}
         >
           Delete product group
@@ -181,6 +241,7 @@ const VendorHomePage = () => {
       </div>
     );
   };
+
 
   const handleAddProduct = (
     productGroupId,
@@ -199,11 +260,12 @@ const VendorHomePage = () => {
       quantity,
       category_id: categoryId,
       vendor_id: vendorId,
-      product_group_id: productGroupId
+      product_group_id: productGroupId,
     };
     const data = addProductApi(param);
-    console.log(data);
-    getProductGroups();
+    // console.log(data);
+    console.log(productGroupId);
+    window.location.reload();
   };
 
   const addProduct = (productGroupId) => {
@@ -211,7 +273,6 @@ const VendorHomePage = () => {
       <div>
         <form
           onSubmit={(event) => {
-
             event.preventDefault();
             handleAddProduct(
               productGroupId,
@@ -221,9 +282,10 @@ const VendorHomePage = () => {
               event.target.discount.value,
               event.target.quantity.value,
               event.target.category.value
-            )
+            );
           }}
         >
+          <p>{productGroupId}</p>
           Title:
           <input type="text" name="title" className="form-control" />
           <br />
@@ -240,14 +302,22 @@ const VendorHomePage = () => {
           <input type="number" name="quantity" className="form-control" />
           <br />
           Category:
-          <select name="category">
+          <select
+            class="form-select"
+            name="category"
+            aria-label="Default select example"
+          >
             {categories.map((category) => (
               <option value={category.id}>{category.title}</option>
             ))}
           </select>
-          <button type="submit" className="btn btn-primary">
-            add product
-          </button>
+          <div className="row">
+            <div className="col-8 mt-2">
+              <button type="submit" className="btn btn-success">
+                add product
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     );
@@ -274,58 +344,117 @@ const VendorHomePage = () => {
         quantity,
         category_id: categoryId,
         vendor_id: vendorId,
-        product_group_id: productGroupId
+        product_group_id: productGroupId,
       },
     };
     const data = updateProductApi(param);
     console.log(data);
-    getProductGroups();
+    // getProductGroups();
+    window.location.reload();
   };
 
   const updateProduct = (productId, productGroupId) => {
     return (
       <div>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            handleUpdateProduct(
-              productId,
-              productGroupId,
-              event.target.title.value,
-              event.target.description.value,
-              event.target.price.value,
-              event.target.discount.value,
-              event.target.quantity.value,
-              event.target.category.value
-            )
-          }
-          }
+        <button
+          type="button"
+          class="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target={`#updateProductModal_${productId}`}
         >
-          Title:
-          <input type="text" name="title" className="form-control" />
-          <br />
-          Description:
-          <input type="text" name="description" className="form-control" />
-          <br />
-          Price:
-          <input type="number" name="price" className="form-control" />
-          <br />
-          Discount:
-          <input type="number" name="discount" className="form-control" />
-          <br />
-          Quantity:
-          <input type="number" name="quantity" className="form-control" />
-          <br />
-          Category:
-          <select name="category">
-            {categories && categories.map((category) => (
-              <option value={category.id}>{category.title}</option>
-            ))}
-          </select>
-          <button type="submit" className="btn btn-primary">
-            update product
-          </button>
-        </form>
+          Update
+        </button>
+        <div
+          class="modal fade"
+          id={`updateProductModal_${productId}`}
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Update Product
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    handleUpdateProduct(
+                      productId,
+                      productGroupId,
+                      event.target.title.value,
+                      event.target.description.value,
+                      event.target.price.value,
+                      event.target.discount.value,
+                      event.target.quantity.value,
+                      event.target.category.value
+                    );
+                  }}
+                >
+                  Title:
+                  <input type="text" name="title" className="form-control" />
+                  <br />
+                  Description:
+                  <input
+                    type="text"
+                    name="description"
+                    className="form-control"
+                  />
+                  <br />
+                  Price:
+                  <input type="number" name="price" className="form-control" />
+                  <br />
+                  Discount:
+                  <input
+                    type="number"
+                    name="discount"
+                    className="form-control"
+                  />
+                  <br />
+                  Quantity:
+                  <input
+                    type="number"
+                    name="quantity"
+                    className="form-control"
+                  />
+                  <br />
+                  Category:
+                  <select
+                    class="form-select"
+                    name="category"
+                    aria-label="Default select example"
+                  >
+                    {categories &&
+                      categories.map((category) => (
+                        <option value={category.id}>{category.title}</option>
+                      ))}
+                  </select>
+                  <button type="submit" className="btn btn-success mt-3">
+                    update product
+                  </button>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   };
@@ -334,7 +463,7 @@ const VendorHomePage = () => {
     return (
       <div>
         <button
-          className="btn btn-primary"
+          className="btn btn-success"
           onClick={() => {
             deleteProductApi(productId);
             getProductGroups();
@@ -412,7 +541,7 @@ const VendorHomePage = () => {
   //             <div class="card-body my-0">
   //               <div class="my-0">
   //                 <p class="float-start">ĐƠN HÀNG CỦA BẠN</p>
-  //                 <button class="btn btn-primary float-end">Đặt Nhóm</button>
+  //                 <button class="btn btn-success float-end">Đặt Nhóm</button>
   //               </div>
   //             </div>
   //             <div class="card-body mt-0 my-0">
@@ -433,38 +562,141 @@ const VendorHomePage = () => {
 
   const displayProductGroups = (data) => {
     const listProductGroups = data.map((productGroup, index) => (
-      <div key={index + 1}>
-        <p>{productGroup.name}</p>
-        <p>{productGroup.description}</p>
-        {updateProductGroup(productGroup.id)}
-        {deleteProductGroup(productGroup.id)}
-        {addProduct(productGroup.id)}
+      <div key={index + 1} className="card mt-3">
+        <div className="row mt-3">
+          <div className="col-8">
+            <p className="text-success fw-bold">Name: {productGroup.name}</p>
+          </div>
+          <div className="col-3">
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target={`#updateProductGroupModal_${productGroup.id}`}
+            >
+              Update
+            </button>
+            <div
+              class="modal fade"
+              id={`updateProductGroupModal_${productGroup.id}`}
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Modal title
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    {updateProductGroup(productGroup.id)}
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="float-end">
+              {deleteProductGroup(productGroup.id)}
+            </div>
+          </div>
+        </div>
+        <p className="text-success fw-bold">
+          Description: {productGroup.description}
+        </p>
+
+        <button
+          type="button"
+          class="btn btn-success col-2"
+          data-bs-toggle="modal"
+          data-bs-target={`#addProductModal_${productGroup.id}`}
+        >
+          Create Product
+        </button>
+
+        <div
+          class="modal fade"
+          id={`addProductModal_${productGroup.id}`}
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Modal title
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">{addProduct(productGroup.id)}</div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {productGroup.product_list.map((product, index) => (
-          <table key={index + 1}>
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Image</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{index + 1}</td>
-                <td>{product.title}</td>
-                <td>{product.price}</td>
-                <td>{product.description}</td>
-                <td>sku: {product.sku}</td>
-                <td>discount: {product.quantity}</td>
+          <div class="card mb-3 mt-2">
+            <div class="row g-0">
+              <div class="col-md-4">
                 <img src={product.image_url} alt="Product" width="200px" />
-                <p>Product id: {product.id}</p>
-                {updateProduct(product.id, productGroup.id)}
-                {deleteProduct(product.id, productGroup.id)}
-              </tr>
-            </tbody>
-          </table>
+              </div>
+              <div class="col-md-8">
+                <div className="row">
+                  <div className="col">
+                    <div class="card-body">
+                      <h5 class="card-title">Id: {product.id}</h5>
+                      <h5 class="card-title">Name: {product.title}</h5>
+                      <h5 class="card-title">Price: {product.price}</h5>
+                      <h5 class="card-title">Quantity: {product.quantity}</h5>
+                      <h5 class="card-title">
+                        Description: {product.description}
+                      </h5>
+                      <h5 class="card-title">Sku: {product.sku}</h5>
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="row mt-5 px-4 p-0">
+                      <div className="col-2 mx-5">
+                        {updateProduct(product.id, productGroup.id)}
+                      </div>
+                      <div className="col">
+                        {deleteProduct(product.id, productGroup.id)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     ));
@@ -478,11 +710,11 @@ const VendorHomePage = () => {
 
       <div className="container">
         <div className="row">
-            {displayProductGroups(productGroup)}
+          {addProductGroup()}
+
+          {displayProductGroups(productGroup)}
         </div>
       </div>
-      
-      {addProductGroup()}
     </div>
   );
 };
