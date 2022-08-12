@@ -3,25 +3,34 @@ import { useSelector } from "react-redux";
 import groupOrderService from "../../../shared/services/api/groupOrderApi";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { deleteProductGroupApi, postProductGroupApi, putProductGroupApi } from "../../../shared/services/api/manageProductApi";
+import {
+  addProductApi,
+  deleteProductApi,
+  deleteProductGroupApi,
+  postProductGroupApi,
+  putProductGroupApi,
+  updateProductApi,
+} from "../../../shared/services/api/manageProductApi";
+import { getAllCategoryApi } from "../../../shared/services/api/manageCategoryApi";
 
 const VendorHomePage = () => {
   const [vendor, setVendor] = useState(null);
   const [productGroup, setProductGroup] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const vendorId = useSelector((state) => state.auth.user.vendorId);
-  console.log("vendor_id: " + vendorId);
 
   useEffect(() => {
     getProductGroups();
+    getCategories();
     getVendor();
-  }, [productGroup]);
+      
+  }, []);
 
   const getProductGroups = async () => {
     try {
       const data = await groupOrderService.getProductGroup(vendorId);
       setProductGroup([...data.data.data]);
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -31,7 +40,17 @@ const VendorHomePage = () => {
     try {
       const data = await groupOrderService.getVendor(vendorId);
       setVendor(data.data.data);
-      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const data = await getAllCategoryApi();
+      setCategories(data.data);
+      console.log(data.data);
+      console.log(categories);
     } catch (err) {
       console.log(err);
     }
@@ -54,16 +73,16 @@ const VendorHomePage = () => {
     return vendorInfo;
   };
 
-  const handleAddProductGroup = (event) => {
+  const handleAddProductGroup = async (event) => {
     event.preventDefault();
     const param = {
       name: event.target.name.value,
       description: event.target.description.value,
       vendor_id: vendorId,
     };
-    const data = postProductGroupApi(param);
+    const data = await postProductGroupApi(param);
     console.log(data);
-    getProductGroups();
+    setProductGroup([...productG]);
   };
 
   const addProductGroup = () => {
@@ -71,11 +90,13 @@ const VendorHomePage = () => {
       <div>
         <form onSubmit={handleAddProductGroup}>
           Name:
-          <input type="text" name="name" className="form-control"/> <br />
+          <input type="text" name="name" className="form-control" /> <br />
           Description:
-          <input type="text" name="description" className="form-control"/>
+          <input type="text" name="description" className="form-control" />
           <br />
-          <button type="submit" className="btn btn-primary">them product group</button>
+          <button type="submit" className="btn btn-primary">
+            them product group
+          </button>
         </form>
       </div>
     );
@@ -99,18 +120,24 @@ const VendorHomePage = () => {
   const updateProductGroup = (productGroupId) => {
     const updateForm = (
       <div>
-        <form onSubmit={
-          (event) => handleUpdateProductGroup(productGroupId,
-            event.target.name.value,
-            event.target.name.description)
-        }>
+        <form
+          onSubmit={(event) =>
+            handleUpdateProductGroup(
+              productGroupId,
+              event.target.name.value,
+              event.target.description.value
+            )
+          }
+        >
           Name:
-          <input type="text" name="name" className="form-control"/> <br />
+          <input type="text" name="name" className="form-control" /> <br />
           Description:
-          <input type="text" name="description" className="form-control"/>
+          <input type="text" name="description" className="form-control" />
           <br />
-          <button type="submit" className="btn btn-primary">update product group</button>
-          </form>
+          <button type="submit" className="btn btn-primary">
+            update product group
+          </button>
+        </form>
       </div>
     );
     return updateForm;
@@ -119,10 +146,171 @@ const VendorHomePage = () => {
   const deleteProductGroup = (productGroupId) => {
     return (
       <div>
-        <button className="btn btn-primary" onClick={deleteProductGroupApi(productGroupId)}>Delete product group</button>
+        <button
+          className="btn btn-primary"
+          onClick={() => deleteProductGroupApi(productGroupId)}
+        >
+          Delete product group
+        </button>
       </div>
-    )
-  }
+    );
+  };
+
+  const handleAddProduct = (
+    productGroupId,
+    name,
+    description,
+    price,
+    discount,
+    quantity,
+    categoryId
+  ) => {
+    const param = {
+      name,
+      description,
+      price,
+      discount,
+      quantity,
+      category_id: categoryId,
+      vendor_id: vendorId,
+      product_group_id: productGroupId
+    };
+    const data = addProductApi(param);
+    console.log(data);
+    getProductGroups();
+  };
+
+  const addProduct = (productGroupId) => {
+    return (
+      <div>
+        <form
+          onSubmit={(event) =>
+            handleAddProduct(
+              productGroupId,
+              event.target.name.value,
+              event.target.description.value,
+              event.target.price.value,
+              event.target.discount.value,
+              event.target.quantity.value,
+              event.target.category.value
+            )
+          }
+        >
+          Name:
+          <input type="text" name="title" className="form-control" />
+          <br />
+          Description:
+          <input type="text" name="description" className="form-control" />
+          <br />
+          Price:
+          <input type="text" name="price" className="form-control" />
+          <br />
+          Discount:
+          <input type="text" name="discount" className="form-control" />
+          <br />
+          Quantity:
+          <input type="text" name="quantity" className="form-control" />
+          <br />
+          Category:
+          <select name="category">
+            {categories.map((category) => (
+              <option value={category.id}>{category.title}</option>
+            ))}
+          </select>
+          <button type="submit" className="btn btn-primary">
+            add product
+          </button>
+        </form>
+      </div>
+    );
+  };
+
+  const handleUpdateProduct = (
+    productId,
+    productGroupId,
+    name,
+    description,
+    price,
+    discount,
+    quantity,
+    categoryId
+  ) => {
+    const param = {
+      id: productId,
+      data: {
+        name,
+        description,
+        price,
+        discount,
+        quantity,
+        category_id: categoryId,
+        vendor_id: vendorId,
+        product_group_id: productGroupId
+      },
+    };
+    const data = updateProductApi(param);
+    console.log(data);
+    getProductGroups();
+  };
+
+  const updateProduct = (productGroupId, productId) => {
+    return (
+      <div>
+        <form
+          onSubmit={(event) =>
+            handleUpdateProduct(
+              productId,
+              productGroupId,
+              event.target.name.value,
+              event.target.description.value,
+              event.target.price.value,
+              event.target.discount.value,
+              event.target.quantity.value,
+              event.target.category.value
+            )
+          }
+        >
+          Name:
+          <input type="text" name="title" className="form-control" />
+          <br />
+          Description:
+          <input type="text" name="description" className="form-control" />
+          <br />
+          Price:
+          <input type="text" name="price" className="form-control" />
+          <br />
+          Discount:
+          <input type="text" name="discount" className="form-control" />
+          <br />
+          Quantity:
+          <input type="text" name="quantity" className="form-control" />
+          <br />
+          Category:
+          <select name="category">
+            {categories && categories.map((category) => (
+              <option value={category.id}>{category}</option>
+            ))}
+          </select>
+          <button type="submit" className="btn btn-primary">
+            update product 
+          </button>
+        </form>
+      </div>
+    );
+  };
+
+  const deleteProduct = (productId) => {
+    return (
+      <div>
+        <button
+          className="btn btn-primary"
+          onClick={deleteProductApi(productId)}
+        >
+          Delete product 
+        </button>
+      </div>
+    );
+  };
 
   // const displayProductGroups = (data) => {
   //   const listProductGroups = data.map((productGroup, index) => (
@@ -216,7 +404,7 @@ const VendorHomePage = () => {
         <p>{productGroup.description}</p>
         {updateProductGroup(productGroup.id)}
         {deleteProductGroup(productGroup.id)}
-        {/* {addProduct()} */}
+        {addProduct(productGroup.id)}
         {productGroup.product_list.map((product, index) => (
           <table key={index + 1}>
             <thead>
@@ -235,8 +423,8 @@ const VendorHomePage = () => {
                 <td>{product.price}</td>
                 <td>{product.description}</td>'
                 <img src={product.image_url} alt="Product" width="200px" />
-                {/* {updateProduct(product.id)} */}
-                {/* {deleteProduct(product.id)} */}
+                {updateProduct(product.id, productGroup.id)}
+                {deleteProduct(product.id, productGroup.id)}
               </tr>
             </tbody>
           </table>
