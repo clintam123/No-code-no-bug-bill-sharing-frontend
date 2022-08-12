@@ -4,6 +4,7 @@ import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import groupOrderService from '../../../../shared/services/api/groupOrderApi';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -16,7 +17,7 @@ const GroupOrder = () => {
 
   // const { vendor_id } = useParams();
   const vendor_id = 1;
-  const user = { username: 'customer', userId: 4 };
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     getProductGroups();
@@ -25,7 +26,7 @@ const GroupOrder = () => {
   }, []);
 
   const handleGetLink = async () => {
-    const newLink = await groupOrderService.getLink(user.userId, vendor_id);
+    const newLink = await groupOrderService.getLink(user.id, vendor_id);
     setLink(newLink.link);
   };
 
@@ -90,7 +91,7 @@ const GroupOrder = () => {
       {},
       JSON.stringify({
         ...orderItem,
-        sendId: user.userId,
+        sendId: user.id,
         quantity: quantity,
         total: quantity * orderItem.price,
       })
@@ -103,7 +104,7 @@ const GroupOrder = () => {
       {},
       JSON.stringify({
         ...orderItem,
-        sendId: user.userId,
+        sendId: user.id,
       })
     );
   }
@@ -116,7 +117,7 @@ const GroupOrder = () => {
       productId: product.id,
       total: product.price * quantity,
       quantity: quantity,
-      userId: user.userId,
+      userId: user.id,
       username: user.username,
       content: 'test',
       price: product.price,
@@ -173,114 +174,188 @@ const GroupOrder = () => {
           </div>
         </div>
       </div>
-
-      // <div>
-      //   <div>{vendor.intro}</div>
-      //   <div>{vendor.profile}</div>
-      //   <div>
-      //     {vendor.address + ' ' + vendor.district + ' ' + vendor.province}
-      //   </div>
-      //   <div>{vendor.phone}</div>
-      //   <img src={vendor.logo} alt="Logo" width="200px" />
-      //   <div>{tvendor.opening_ime}</div>
-      //   <div>{vendor.closing_time}</div>
-      // </div>
     );
     return vendorInfo;
   };
 
   const displayProductGroups = (data) => {
     const listProductGroups = data.map((productGroup, index) => (
-      <div className="container-xxl" key={index + 1}>
+      <div className="row">
+        {productGroup.product_list.map((product, index) => (
+          <div className="card mb-3" key={index}>
+            <div className="row g-0">
+              <div className="col-md-3">
+                <img src={product.image_url} alt="Product" width="200px" />
+              </div>
+              <div className="col-md-9">
+                <div className="card-body">
+                  <button
+                    className="btn btn-primary float-end"
+                    onClick={() => handleAddOrderItem(product, index)}
+                  >
+                    Đặt món
+                  </button>
+                  <h5 className="card-title">Tên sản phẩm: {product.title}</h5>
+                  <h6 className="card-text">Giá: {product.price}</h6>
+                  <p className="card-text">Loại: {product.description}</p>
+                  <p className="card-text">
+                    <div className="input-group mb-3">
+                      <label htmlFor="">Số lượng:</label>
+                    </div>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id={'quantity-' + index}
+                      placeholder="Số lượng"
+                    />
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ));
+    return listProductGroups;
+  };
+
+  const displayOrder = (order) => {
+    const listOrder = (
+      <div>
+        {order.orderItemRedis != null &&
+          order.orderItemRedis.map((orderItem, index) => (
+            <div>
+              <div className="row">
+                <div className="card-body p-0 mx-3 mb-2 ">
+                  <h5 className="float-start text-danger">
+                    Tài khoản: {orderItem.username}
+                  </h5>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="card-body p-0 mx-3 mb-2 ">
+                  <h5 className="cart-title float-start">
+                    {orderItem.productName}
+                  </h5>
+                  <h5 className="float-end text-danger mx-3">
+                    {orderItem.price} đ
+                  </h5>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="card-body p-0 mx-3 mb-2 ">
+                  <h5 className="cart-title float-start">Số Lượng:</h5>
+                  <h5 className="float-end text-danger mx-3">
+                    {orderItem.quantity}
+                  </h5>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-5 mx-2">
+                  {orderItem.userId == user.id && (
+                    <button
+                      className="btn btn-outline-primary"
+                      onClick={() => sendUpdateRequest(orderItem, index)}
+                    >
+                      Thay đổi
+                    </button>
+                  )}
+                </div>
+                <div className="col-6">
+                  <div className="input-group">
+                    <input
+                      type="number"
+                      className="form-control"
+                      id={'orderItem-' + index}
+                      placeholder="Thay đổi số lượng"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div class="card-body p-0 mx-3">
+                  {orderItem.userId == user.id && (
+                    <button
+                      className="btn btn-outline-danger float-end mx-3 mt-2"
+                      onClick={() => sendDeleteRequest(orderItem)}
+                    >
+                      Xóa
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="row">
+                <div class="card-body p-0 mx-3 mt-2 mb-3">
+                  <h6 class="float-start">Thành Tiền :</h6>
+                  <h6 class="float-end text-danger mx-3">
+                    {' '}
+                    {orderItem.total} đ
+                  </h6>
+                </div>
+              </div>
+              <hr class="text-danger" />
+            </div>
+          ))}
+        <div className="row">
+          <div class="card-body p-0 mx-3">
+            <h6 class="float-start">Mã Giảm Giá (Nếu có) : {order.discount}</h6>
+          </div>
+        </div>
+        <div className="row">
+          <div class="card-body p-0 mx-3 mt-2">
+            <h6 class="float-start">Tiền Shipping :</h6>
+            <h6 class="float-end text-danger"> {order.shipping} đ</h6>
+          </div>
+        </div>
+        <div className="row">
+          <div class="card-body p-0 mx-3 mt-2 mb-3">
+            <h6 class="float-start">Tổng (Tạm tính) :</h6>
+            <h6 class="float-end text-danger"> {order.grandTotal} đ</h6>
+          </div>
+        </div>
+        <hr class="text-danger" />
+      </div>
+    );
+    return listOrder;
+  };
+
+  return (
+    <div>
+      {vendor != null && displayVendor(vendor)}
+      <div className="container-xxl">
         <div className="row mt-5 mb-5">
           <div className="col-2">
             <div className="card">
               <ul className="list-group list-group-flush">
-                <li className="list-group-item">{productGroup.name}</li>
-                <li className="list-group-item">{productGroup.description}</li>
+                <li className="list-group-item">Bánh Bao</li>
+                <li className="list-group-item">Bánh bao trứng thịt</li>
               </ul>
             </div>
           </div>
-          <div className="col-6">
-            <div className="row">
-              {productGroup.product_list.map((product, index) => (
-                <div className="card mb-3" key={index}>
-                  <div className="row g-0">
-                    <div className="col-md-3">
-                      <img
-                        src={product.image_url}
-                        alt="Product"
-                        width="200px"
-                      />
-                    </div>
-                    <div className="col-md-9">
-                      <div className="card-body">
-                        <button
-                          className="btn btn-primary float-end"
-                          onClick={() => handleAddOrderItem(product, index)}
-                        >
-                          Đặt món
-                        </button>
-                        <h5 className="card-title">
-                          Tên sản phẩm: {product.title}
-                        </h5>
-                        <h6 className="card-text">Giá: {product.price}</h6>
-                        <p className="card-text">Loại: {product.description}</p>
-                        <p className="card-text">
-                          <div className="input-group mb-3">
-                            <label htmlFor="">Số lượng:</label>
-                          </div>
-                          <input
-                            type="number"
-                            className="form-control"
-                            id={'quantity-' + index}
-                            placeholder="Số lượng"
-                          />
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <div className="col-6">{displayProductGroups(productGroup)}</div>
+
           <div className="col-4">
-            {/* <div>
-              {vendor != null && displayVendor(vendor)}
-              {displayProductGroups(productGroup)}
-
-              <input
-                id="link"
-                type="text"
-                value={link}
-                name="Link"
-                onChange={(e) => setLink(e.target.value)}
-              />
-              <button className="btn btn-primary" onClick={connect}>
-                Connect
-              </button>
-              <br />
-              <button onClick={handleGetLink}>Get Link</button>
-              <button onClick={handleOrder}>Order</button>
-              {order != null && displayOrder(order)}
-            </div> */}
-
-            <div className="card">
+            <div className="card mb-3">
               <div className="card-body">
                 <h5 className="card-title">Ưu Đãi</h5>
                 <hr className="w-100" />
                 <p className="card-text">🌎 Freeship đơn hàng dưới 2km</p>
               </div>
             </div>
-            <div className="card mt-3">
+            <div className="card">
               <div className="card-body my-0">
                 <div className="my-0">
                   <h6 className="float-start">ĐƠN HÀNG CỦA BẠN</h6>
                   <button
                     className="btn btn-primary float-end"
-                    onClick={connect}
+                    onClick={handleGetLink}
                   >
-                    Đặt nhóm
+                    Lấy link
                   </button>
 
                   <div className="input-group mb-3">
@@ -297,19 +372,20 @@ const GroupOrder = () => {
                           placeholder="Get link"
                         />
                       </div>
-
                       <button
-                        className="btn btn-primary float-end mx-3"
-                        onClick={handleGetLink}
+                        className="btn btn-primary float-end  mx-3"
+                        onClick={connect}
                       >
-                        Get Link
+                        Đặt nhóm
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {order != null && displayOrder(order)}
+
               <div className="card-body mt-0 my-0">
-                {order != null && displayOrder(order)}
                 <p className="card-text text-center">
                   Hãy chọn món yêu thích của bạn trên menu để đặt giao hàng
                   ngay!
@@ -320,134 +396,7 @@ const GroupOrder = () => {
         </div>
       </div>
 
-      // <div key={index + 1}>
-      //   <p>{productGroup.name}</p>
-      //   <p>{productGroup.description}</p>
-      //   {productGroup.product_list.map((product, index) => (
-      //     <table key={index + 1}>
-      //       <thead>
-      //         <tr>
-      //           <th>STT</th>
-      //           <th>Title</th>
-      //           <th>Price</th>
-      //           <th>Description</th>
-      //           <th>Action</th>
-      //         </tr>
-      //       </thead>
-      //       <tbody>
-      //         <tr key={index}>
-      //           <td>{index + 1}</td>
-      //           <td>{product.title}</td>
-      //           <td>{product.price}</td>
-      //           <td>{product.description}</td>
-      //           <td>
-      //             <input type="number" id={'quantity-' + index} />
-      //             <button
-      //               className="btn btn-primary"
-      //               onClick={() => handleAddOrderItem(product, index)}
-      //             >
-      //               Dat mon
-      //             </button>
-      //           </td>
-      //         </tr>
-      //       </tbody>
-      //     </table>
-      //   ))}
-      // </div>
-    ));
-    return listProductGroups;
-  };
-
-  const displayOrder = (order) => {
-    const listOrder = (
-      <div className="row">
-        <div className="col">
-          {order.orderItemRedis != null &&
-            order.orderItemRedis.map((orderItem, index) => (
-              <div className="row">
-                <div>
-                  <h6>🦸‍♂️ {orderItem.username}</h6>
-                </div>
-                <h6 className="float-start">
-                  Tên sản phẩm: {orderItem.productName}
-                </h6>
-                <div className="float-end">
-                  <h6>Giá: {orderItem.price} đ</h6>
-                </div>
-              </div>
-            ))}
-        </div>
-        <div className="col">
-          <div className="row">
-            <h6>Mã giảm giá: {order.discount}</h6>
-          </div>
-          <div className="row">
-            <h6>Tổng (Tạm tính): {order.grandTotal}</h6>
-          </div>
-        </div>
-      </div>
-
-      // <div>
-      //   <h1>Order</h1>
-      //   <p>Discount: {order.discount}</p>
-      //   <p>Shipping: {order.shipping}</p>
-      //   <p>Grand Total: {order.grandTotal}</p>
-      //   <table>
-      //     <thead>
-      //       <tr>
-      //         <th>STT</th>
-      //         <th>Title</th>
-      //         <th>Username</th>
-      //         <th>Price</th>
-      //         <th>Quantity</th>
-      //         <th>Total</th>
-      //       </tr>
-      //     </thead>
-      //     <tbody>
-      //       {order.orderItemRedis != null &&
-      //         order.orderItemRedis.map((orderItem, index) => (
-      //           <tr>
-      //             <td>{index}</td>
-      //             <td>{orderItem.productName}</td>
-      //             <td>{orderItem.username}</td>
-      //             <td>{orderItem.price}</td>
-      //             <td>{orderItem.quantity}</td>
-      //             <img src={orderItem.imageUrl} alt="product" />
-      //             <td>{orderItem.total}</td>
-      //             <td>
-      //               <input type="number" id={'orderItem-' + index} />
-      //               {orderItem.userId == user.userId && (
-      //                 <button
-      //                   className="updateOrderItem"
-      //                   onClick={() => sendUpdateRequest(orderItem, index)}
-      //                 >
-      //                   Update
-      //                 </button>
-      //               )}
-      //               {orderItem.userId == user.userId && (
-      //                 <button
-      //                   className="deleteOrderItem"
-      //                   onClick={() => sendDeleteRequest(orderItem)}
-      //                 >
-      //                   Delete
-      //                 </button>
-      //               )}
-      //             </td>
-      //           </tr>
-      //         ))}
-      //     </tbody>
-      //   </table>
-      // </div>
-    );
-    return listOrder;
-  };
-
-  return (
-    <div>
-      {vendor != null && displayVendor(vendor)}
-      {displayProductGroups(productGroup)}
-
-      <input
+      {/* <input
         id="link"
         type="text"
         value={link}
@@ -459,8 +408,9 @@ const GroupOrder = () => {
       </button>
       <br />
       <button onClick={handleGetLink}>Get Link</button>
-      <button onClick={handleOrder}>Order</button>
-      {order != null && displayOrder(order)}
+      <button onClick={handleOrder}>Order</button> */}
+
+      {/* {order != null && displayOrder(order)} */}
     </div>
   );
 };

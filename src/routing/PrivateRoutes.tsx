@@ -16,6 +16,8 @@ import FallbackView from '../_metronic/partials/FallbackView';
 // import AdminManageVendor from '../modules/admin/pages/manageVendor/ManageVendor';
 // import { USER_ROLE } from '../shared/constant';
 
+import FilterProduct from '../modules/customer/pages/searchProduct/FilterProduct';
+
 const PrivateRoutes = () => {
   const AdminHomePage = lazy(
     () => import('../modules/admin/pages/AdminHomePage')
@@ -68,16 +70,17 @@ const PrivateRoutes = () => {
       case USER_ROLE.CUSTOMER:
         return (
           <Routes>
+            <Route path="" element={<HomePage />} />
+            <Route path="/tim-kiem-san-pham" element={<FilterProduct />} />
             <Route path="/group-order" element={<GroupOrder />} />
-            <Route path="/home" element={<HomePage />} />
           </Routes>
         );
-      //   default:
-      //     return (
-      //       <Routes>
-      //         <Route path="/" element={<HomePage />} />
-      //       </Routes>
-      //     );
+      // default:
+      //   return (
+      //     <Routes>
+      //       <Route path="/" element={<HomePage />} />
+      //     </Routes>
+      //   );
     }
   };
   return (
