@@ -6,6 +6,7 @@ import Profile from '../modules/auth/component/Profile';
 import CustomerHomePage from '../modules/customer/pages/CustomerHomePage';
 import GroupOrder from '../modules/customer/pages/groupOrder/GroupOrder.js';
 import HomePage from '../modules/public/HomePage';
+import CategoryPage from '../modules/public/CategoryPage';
 import ManageProduct from '../modules/vendor/pages/manageProduct/ManageProduct';
 import VendorHomePage from '../modules/vendor/pages/VendorHomePage';
 import { USER_ROLE } from '../shared/constant';
@@ -69,6 +70,7 @@ const PrivateRoutes = () => {
         return (
           <Routes>
             <Route path="" element={<HomePage />} />
+            <Route path="/category" element={<CategoryPage />} />
             <Route path="/group-order" element={<GroupOrder />} />
           </Routes>
         );
