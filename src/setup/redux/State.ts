@@ -3,7 +3,8 @@ export interface IUser {
     username: string;
     fullName: string;
     role: string;
-    accessToken: string
+    accessToken: string;
+    vendorId: number;
   }
   
   export interface ICategory {

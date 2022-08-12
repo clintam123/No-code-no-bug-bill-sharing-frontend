@@ -13,13 +13,13 @@ import Auth from "../../auth/component/Auth";
 
 const { Header, Content, Footer, Sider } = Layout;
 const items = [
-  { icon: UserOutlined, route: "/home/manage-user", name: "Manage User" },
+  { icon: UserOutlined, route: "/manage-user", name: "Manage User" },
   {
     icon: TeamOutlined,
-    route: "/home/manage-category",
+    route: "/manage-category",
     name: "Manage Category",
   },
-  { icon: ShopOutlined, route: "/home/manage-vendor", name: "Manage Vendor" },
+  { icon: ShopOutlined, route: "/manage-vendor", name: "Manage Vendor" },
 ].map((item, index) => ({
   key: String(index + 1),
   icon: React.createElement(item.icon),
@@ -41,7 +41,7 @@ const AdminHomePage = () => {
         }}
       >
         <div className="logo" >
-          <Link to="/home/manage-user">Logo</Link>
+          <Link to="/manage-user">Logo</Link>
         </div>
         <Menu
           theme="dark"
