@@ -10,7 +10,7 @@ const AdminStatistics = () => {
 
   const getAllOrders = () => {
     return (
-      <div>
+      <div className="col-12">
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -22,15 +22,30 @@ const AdminStatistics = () => {
             setOrders([...data.data]);
           }}
         >
-          Ngày bắt đầu:
-          <input type="date" name="startDate" />
-          <br />
-          Ngày kết thúc:
-          <input type="date" name="endDate" />
-          <br />
-          <button type="submit" className="btn btn-primary">
-            Xem tất cả order
-          </button>
+          <div className="row">
+            <div className="col-5"> </div>
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày bắt đầu:</label>
+                <input type="date" class="form-control" name="startDate" />
+              </div>
+            </div>
+
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày kết thúc:</label>
+                <input type="date" class="form-control" name="endDate" />
+              </div>
+            </div>
+
+            <div className="col-3 mt-4 mb-4">
+              <div class="form-group">
+                <button type="submit" className="btn btn-success">
+                  Xem tất cả order
+                </button>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
     );
@@ -39,25 +54,20 @@ const AdminStatistics = () => {
   const displayOrders = () => {
     const listOrders = orders.map((order, index) => {
       return (
-        <div>
-          <div>Khách hàng: {order.fullname}</div>
-          <br />
-          <div>Username: {order.username}</div>
-          <br />
-          <div>Tên quán ăn: {order.intro}</div>
-          <br />
-          <div>Discount: {order.discount}</div>
-          <br />
-          <div>Shipping: {order.shipping}</div>
-          <br />
-          <div>Tổng tiền: {order.grand_total}</div>
-          <br />
-          <div>Tạo lúc: {order.created_at}</div>
-          <br />
-          <div>Thay đổi lúc: {order.updated_at}</div>
-          <br />
-          <hr />
-        </div>
+
+        <tbody>
+          <tr>
+            <td>{order.fullname}</td>
+            <td>{order.username}</td>
+            <td>{order.intro}</td>
+            <td>{order.discount}</td>
+            <td>{order.shipping}</td>
+            <td>{order.grand_total}</td>
+            <td>{order.created_at}</td>
+            <td>{order.updated_at}</td>
+          </tr>
+        </tbody>
+
       );
     });
     return listOrders;
@@ -65,7 +75,7 @@ const AdminStatistics = () => {
 
   const getAllRevenue = () => {
     return (
-      <div>
+      <div className="col-12">
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -77,15 +87,28 @@ const AdminStatistics = () => {
             setRevenues([...data.data]);
           }}
         >
-          Ngày bắt đầu:
-          <input type="date" name="startDate" />
-          <br />
-          Ngày kết thúc:
-          <input type="date" name="endDate" />
-          <br />
-          <button type="submit" className="btn btn-primary">
-            Xem tất cả doanh thu
-          </button>
+          <div className="row">
+            <div className="col-5"> </div>
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày bắt đầu:</label>
+                <input type="date" class="form-control" name="startDate" />
+              </div>
+            </div>
+
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày kết thúc:</label>
+                <input type="date" class="form-control" name="endDate" />
+              </div>
+            </div>
+
+            <div className="col-3 mt-4 mb-4">
+                <button type="submit" className="btn btn-success">
+                Xem tất cả doanh thu
+                </button>
+            </div>
+          </div>
         </form>
       </div>
     );
@@ -94,30 +117,59 @@ const AdminStatistics = () => {
   const displayRevenues = () => {
     const listRevenues = revenues.map((revenue, index) => {
       return (
-        <div>
-          <div>Tên quán ăn: {revenue.intro}</div>
-          <br />
-          <div>Địa chỉ: {revenue.address}</div>
-          <br />
-          <div>Quận: {revenue.district}</div>
-          <br />
-          <div>Tỉnh: {revenue.province}</div>
-          <br />
-          <div>Doanh thu: {revenue.revenue}</div>
-          <br />
-          <hr />
-        </div>
+        <tbody>
+          <tr>
+            <td>{revenue.intro}</td>
+            <td>{revenue.address}</td>
+            <td>{revenue.province}</td>
+            <td>{revenue.district}</td>
+            <td>{revenue.revenue}</td>
+          </tr>
+        </tbody>
       );
     });
     return listRevenues;
   };
 
   return (
-    <div>
-      {getAllOrders()}
-      {displayOrders()}
-      {getAllRevenue()}
-      {displayRevenues()}
+    <div className="container">
+      <div className="row">
+        {getAllOrders()}
+      </div>
+      <div className="row">
+        <table className="table table-bordered border-success table-striped table-hover">
+          <thead className="bg-success text-white">
+            <tr>
+              <th>Khách hàng</th>
+              <th>Tài khoản</th>
+              <th>Tên quán ăn</th>
+              <th>Giảm Giá</th>
+              <th>Tiền Shipping</th>
+              <th>Tổng tiền</th>
+              <th>Tạo lúc</th>
+              <th>Thay đổi lúc</th>
+            </tr>
+          </thead>
+          {displayOrders()}
+        </table>
+      </div>
+      <div className="row">
+        {getAllRevenue()}
+      </div>
+      <div className="row mt-3">
+      <table className="table table-bordered border-success table-striped table-hover">
+          <thead className="bg-success text-white">
+            <tr>
+              <th>Tên quán ăn</th>
+              <th>Địa chỉ</th>
+              <th>Quận</th>
+              <th>Tỉnh</th>
+              <th>Doanh thu</th>
+            </tr>
+          </thead>
+          {displayRevenues()}
+        </table>
+      </div>
     </div>
   );
 };
