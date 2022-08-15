@@ -22,3 +22,23 @@ export const updateVendorImage = async (id: any, file: any) => {
     console.error(err);
   }
 };
+
+export const updateVendorInfoApi = async (id: any, param: any) => {
+  try {
+    console.log(param);
+    const res = await client.put('vendor/' + id, param);
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postVendorApi = async (param: any) => {
+  try {
+    const res = await client.post('auth/signup/vendor', param);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

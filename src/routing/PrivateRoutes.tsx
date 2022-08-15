@@ -14,6 +14,9 @@ import { USER_ROLE } from '../shared/constant';
 import FallbackView from '../_metronic/partials/FallbackView';
 import PersonalOrder from '../modules/customer/pages/groupOrder/PersonalOrder';
 import CustomerAccount from '../modules/customer/pages/CustomerAccount';
+import ProductReview from '../modules/public/ProductReview';
+import SignupUser from '../modules/public/SignupUser';
+import SignupVendor from '../modules/public/SignupVendor';
 
 const PrivateRoutes = () => {
   const AdminHomePage = lazy(
@@ -32,13 +35,7 @@ const PrivateRoutes = () => {
   const VendorHomePage = lazy(
     () => import('../modules/vendor/pages/VendorHomePage')
   );
-  const ManageProduct = lazy(
-    () => import('../modules/vendor/pages/manageProduct/ManageProduct')
-  );
 
-  const CustomerHomePage = lazy(
-    () => import('../modules/customer/pages/CustomerHomePage')
-  );
   const user: any = useSelector((state: any) => state.auth.user) || '';
   const renderByRole = () => {
     const role = user.role || '';
@@ -51,7 +48,7 @@ const PrivateRoutes = () => {
               <Route path="manage-vendor" element={<AdminManageVendor />} />
               <Route path="manage-user" element={<AdminManageUser />} />
               <Route path="manage-user/:id" element={<UserDetail />} />
-              {/* <Route path="profile" element={<Profile />} /> */}
+              <Route path="/login" element={<Login />} />
             </Route>
           </Routes>
         );
@@ -60,6 +57,7 @@ const PrivateRoutes = () => {
         return (
           <Routes>
             <Route path="" element={<VendorHomePage />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         );
       case USER_ROLE.CUSTOMER:
@@ -75,20 +73,18 @@ const PrivateRoutes = () => {
             />
             <Route path="/group-order/vendor/:id" element={<GroupOrder />} />
             <Route path="/order/vendor/:id" element={<PersonalOrder />} />
+            <Route path="/review/product/:id" element={<ProductReview />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         );
-      // default:
-      //   return (
-      //     <Routes>
-      //       <Route path="/" element={<Login />} />
-      //     </Routes>
-      //   );
-      //   default:
-      //     return (
-      //       <Routes>
-      //         <Route path="/" element={<HomePage />} />
-      //       </Routes>
-      //     );
+      default:
+        return (
+          <Routes>
+            <Route path="" element={<Login />} />
+            <Route path="/signup/user" element={<SignupUser />} />
+            <Route path="/signup/vendor/:id" element={<SignupVendor />} />
+          </Routes>
+        );
     }
   };
   return (

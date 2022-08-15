@@ -217,6 +217,12 @@ const PersonalOrder = () => {
                       placeholder="Ghi chú"
                     />
                   </p>
+
+                  <a
+                    href={`http://localhost:3000/review/product/${product.id}`}
+                  >
+                    <button className="btn btn-primary">Xem review</button>
+                  </a>
                 </div>
               </div>
             </div>

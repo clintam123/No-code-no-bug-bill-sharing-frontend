@@ -83,7 +83,6 @@ export const getProductByCategoryApi = async (title: any) => {
 };
 
 export const seachProductApi = async (param: any) => {
-  console.log(param);
   try {
     const res = await client.post(`product/filter?page=0&page_size=50`, param);
     return res.data;
@@ -105,3 +104,39 @@ export const updateProductImage = async (id:any, file: any) => {
     console.error(err);
   }
 };
+
+export const getProductReviewApi = async (id: any) => {
+  try {
+    const res = await client.get(`product-review/product/${id}?page=0&page_size=50`);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const postProductReviewApi = async (id: any, param: any) => {
+  try {
+    const res = await client.post(`product-review/product/${id}`, param);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  } 
+}
+
+export const putProductReviewApi = async (id: any, param: any) => {
+  try {
+    const res = await client.put(`product-review/${id}`, param);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  } 
+}
+
+export const deleteProductReviewApi = async (id: any) => {
+  try {
+    const res = await client.delete(`product-review/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  } 
+}

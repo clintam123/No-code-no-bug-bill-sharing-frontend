@@ -16,7 +16,10 @@ import {
   updateProductImage,
 } from '../../../shared/services/api/manageProductApi';
 import { getAllCategoryApi } from '../../../shared/services/api/manageCategoryApi';
-import { updateVendorImage } from '../../../shared/services/api/manageVendorApi';
+import {
+  updateVendorImage,
+  updateVendorInfoApi,
+} from '../../../shared/services/api/manageVendorApi';
 
 const VendorHomePage = () => {
   const [vendor, setVendor] = useState(null);
@@ -24,6 +27,7 @@ const VendorHomePage = () => {
   const [categories, setCategories] = useState([]);
 
   const vendorId = useSelector((state) => state.auth.user.vendorId);
+  const userId = useSelector((state) => state.auth.user.id);
 
   useEffect(() => {
     getProductGroups();
@@ -749,10 +753,70 @@ const VendorHomePage = () => {
     );
   };
 
+  const updateVendorInfoForm = () => {
+    return (
+      <div>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await updateVendorInfoApi(vendorId, {
+              intro: e.target.intro.value,
+              profile: e.target.profile.value,
+              address: e.target.address.value,
+              district: e.target.district.value,
+              province: e.target.province.value,
+              opening_time: e.target.opening_time.value,
+              closing_time: e.target.closing_time.value,
+              phone: e.target.phone.value,
+              user_id: userId,
+            });
+            window.location.reload();
+          }}
+        >
+          Tên: <input type="text" name="intro" defaultValue={vendor.intro} />{' '}
+          <br />
+          Mô tả chi tiêt:{' '}
+          <input type="text" name="profile" defaultValue={vendor.profile} />
+          <br />
+          Địa chỉ:
+          <input type="text" name="address" defaultValue={vendor.address} />
+          <br />
+          Quận:{' '}
+          <input type="text" name="district" defaultValue={vendor.district} />
+          <br />
+          Tỉnh:{' '}
+          <input type="text" name="province" defaultValue={vendor.province} />
+          <br />
+          Giờ mở cửa:{' '}
+          <input
+            type="text"
+            name="opening_time"
+            defaultValue={vendor.opening_time}
+          />
+          <br />
+          Giờ đóng cửa:{' '}
+          <input
+            type="text"
+            name="closing_time"
+            defaultValue={vendor.closing_time}
+          />
+          <br />
+          Số điện thoại:{' '}
+          <input type="text" name="phone" defaultValue={vendor.phone} />
+          <br />
+          <button type="submit" className="btn btn-primary">
+            Thay đổi info
+          </button>
+        </form>
+      </div>
+    );
+  };
+
   return (
     <div>
       {vendor != null && displayVendor(vendor)}
       {updateVendorImageForm()}
+      {vendor != null && updateVendorInfoForm()}
 
       <div className="container">
         <div className="row">
