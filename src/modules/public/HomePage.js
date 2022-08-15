@@ -33,7 +33,7 @@ const HomePage = () => {
   const displayCategories = (categories) => {
     const listCategories = categories.map((category, index) => (
       <div className="px-3 col-2">
-        <a href={`/product/category/${category.title}`}>
+        <a className="text-decoration-none text-black" href={`/product/category/${category.title}`}>
           <div className=" ">
             <img
               src={category.image_url}
@@ -90,8 +90,20 @@ const HomePage = () => {
 
   return (
     <div>
-      <a href="/product/search">Tìm kiếm sản phẩm</a>
-      <a href="/account">Quản lí tài khoản</a>
+      <nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="http://localhost:3000/">Home</a>
+        <a class="nav-link" href="/product/search">| Tìm kiếm sản phẩm</a>
+        <a class="nav-link" href="/account">| Quản lí tài khoản</a>
+
+      </div>
+    </div>
+  </div>
+</nav>
+      {/* <a href="/product/search">Tìm kiếm sản phẩm</a>
+      <a href="/account">Quản lí tài khoản</a> */}
       <div class=" ">
         <img
           className="card-img"

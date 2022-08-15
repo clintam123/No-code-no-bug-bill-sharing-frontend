@@ -19,27 +19,30 @@ const ProductByCategory = () => {
 
   const displayProducts = (products) => {
     const listProducts = products.map((product, index) => (
-      <div key={index} className="px-3 col-2">
-        <a href={`../../order/vendor/${product.vendor_id}`}>
+      <div key={index} className="px-3 col-2 card mx-3">
+        <a className="text-decoration-none text-success" href={`../../order/vendor/${product.vendor_id}`}>
           <div className=" ">
             <img
               src={product.product_image}
               alt="Product"
-              className=""
+              className="card-img-top mt-3"
               width="70%"
             />
             <div className="card-body">
-              <h5 className="card-title">{product.product_name}</h5>
-              <p className="card-text">{product.description}</p>
-              <p className="card-text">{product.price}đ</p>
+              <h5 className="card-title" >🍥Sản phẩm: {product.product_name}</h5>
+              <p className="card-text">📝Mô tả: {product.description}</p>
+              <p className="card-text">💰price: {product.price}đ</p>
+            </div>
+            <div className="container">
+              <hr />
             </div>
             <img
               src={product.vendor_logo}
               alt="Vendor"
-              className=""
+              className="mt-3 card-img-top"
               width="70%"
             />
-            <p className="card-text">{product.vendor}</p>
+            <p className="card-text">📞Vendor: {product.vendor}</p>
           </div>
         </a>
       </div>
@@ -49,8 +52,25 @@ const ProductByCategory = () => {
 
   return (
     <div>
+            <nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="http://localhost:3000/">Home</a>
+        <a class="nav-link" href="/product/search">| Tìm kiếm sản phẩm</a>
+        <a class="nav-link" href="/account">| Quản lí tài khoản</a>
+
+      </div>
+    </div>
+  </div>
+</nav>
       <div>Product</div>
-      {displayProducts(products)}
+      <div className="container mt-4">
+        <div className="row">
+        {displayProducts(products)}
+        </div>
+        </div>
+      
     </div>
   );
 };

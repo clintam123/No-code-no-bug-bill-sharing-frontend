@@ -51,6 +51,7 @@ const PrivateRoutes = () => {
               <Route path="manage-vendor" element={<AdminManageVendor />} />
               <Route path="manage-user" element={<AdminManageUser />} />
               <Route path="manage-user/:id" element={<UserDetail />} />
+              <Route path="/login" element={<Login />} /> 
               {/* <Route path="profile" element={<Profile />} /> */}
             </Route>
           </Routes>
@@ -60,6 +61,7 @@ const PrivateRoutes = () => {
         return (
           <Routes>
             <Route path="" element={<VendorHomePage />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         );
       case USER_ROLE.CUSTOMER:
@@ -75,14 +77,15 @@ const PrivateRoutes = () => {
             />
             <Route path="/group-order/vendor/:id" element={<GroupOrder />} />
             <Route path="/order/vendor/:id" element={<PersonalOrder />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         );
-      // default:
-      //   return (
-      //     <Routes>
-      //       <Route path="/" element={<Login />} />
-      //     </Routes>
-      //   );
+      default:
+        return (
+          <Routes>
+            <Route path="/" element={<Login />} />
+          </Routes>
+        );
       //   default:
       //     return (
       //       <Routes>

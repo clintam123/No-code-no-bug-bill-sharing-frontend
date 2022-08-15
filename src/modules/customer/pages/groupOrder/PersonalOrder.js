@@ -19,7 +19,7 @@ const PersonalOrder = () => {
     getProductGroups();
     getVendor();
     const order = localStorage.getItem('order');
-    if(order.vendor_id == vendor_id){
+    if(order != null && order.vendor_id == vendor_id){
       setOrder(JSON.parse(order));
     }else {
       localStorage.removeItem('order');
@@ -334,7 +334,19 @@ const PersonalOrder = () => {
   };
 
   return (
+    
     <div>
+            <nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="http://localhost:3000/">Home</a>
+        <a class="nav-link" href="/product/search">| Tìm kiếm sản phẩm</a>
+        <a class="nav-link" href="/account">| Quản lí tài khoản</a>
+      </div>
+    </div>
+  </div>
+</nav>
       {vendor != null && displayVendor(vendor)}
       <div className="container-xxl">
         <div className="row mt-5 mb-5">

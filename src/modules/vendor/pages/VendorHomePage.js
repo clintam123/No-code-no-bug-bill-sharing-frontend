@@ -63,7 +63,7 @@ const VendorHomePage = () => {
       <div className="container-xxl">
         <div className="row mt-5">
           <div className="card mb-3">
-            <img src={vendor.logo} alt="Logo" />
+            <img src={vendor.logo} alt="Logo" width="100%"/>
             <div className="card-body ml-5">
               <div className="row">
                 <div className="col ml-5">
@@ -709,20 +709,22 @@ const VendorHomePage = () => {
     return (
       <div>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             console.log(e.target.vendorImage.files[0]);
-            updateVendorImage(vendorId, {
+            await updateVendorImage(vendorId, {
               file: e.target.vendorImage.files[0],
             });
             window.location.reload();
           }}
         >
+          <div className="container">
           <label for="vendorImage">Select Vendor Image:</label>
           <input type="file" id="vendorImage" name="vendorImage" />
           <br />
-          <input type="submit" className="btn btn-primary" />
-        </form>
+          <input type="submit" className="btn btn-success" />
+          </div>
+        </form >
       </div>
     );
   };
@@ -731,30 +733,47 @@ const VendorHomePage = () => {
     return (
       <div>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            console.log(e.target.vendorImage.files[0]);
-            updateProductImage(id, {
-              file: e.target.vendorImage.files[0],
+            console.log(e.target.productImage.files[0]);
+           await  updateProductImage(id, {
+              file: e.target.productImage.files[0],
             });
             window.location.reload();
           }}
         >
+          <div className="mx-5">
           <label for="productImage">Select Product Image:</label>
           <input type="file" id="productImage" name="productImage" />
           <br />
-          <input type="submit" className="btn btn-primary" />
+          <input type="submit" className="btn btn-success mt-1" />
+          </div>
         </form>
+        
       </div>
     );
   };
 
   return (
     <div>
+                <nav class="navbar navbar-expand-lg bg-light container">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="http://localhost:3000/">Home</a>
+        <a class="nav-link" href="/account">| Quản lí tài khoản</a>
+        <div class="float-end">
+        <a class="nav-link float-end" href="/login"> | Login</a>
+        <a class="nav-link float-end" href="/logout">| Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
       {vendor != null && displayVendor(vendor)}
       {updateVendorImageForm()}
 
-      <div className="container">
+      <div className="container mt-5">
         <div className="row">
           {addProductGroup()}
           {displayProductGroups(productGroup)}
