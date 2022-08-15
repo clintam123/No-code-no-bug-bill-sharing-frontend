@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import groupOrderService from '../../../../shared/services/api/groupOrderApi';
@@ -19,12 +18,11 @@ const PersonalOrder = () => {
     getProductGroups();
     getVendor();
     const order = localStorage.getItem('order');
-    if(order.vendor_id == vendor_id){
+    if (order != null && order.vendor_id == vendor_id) {
       setOrder(JSON.parse(order));
-    }else {
+    } else {
       localStorage.removeItem('order');
     }
-    
   }, []);
 
   const getProductGroups = async () => {

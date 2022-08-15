@@ -23,9 +23,39 @@ export const getUserByIdApi = async (id: any) => {
 export const deleteUserApi = async (id: number) => {
   try {
     const res = await client.delete(`user/${id}`);
-    notify('success', 'User', 'Delete successfully!');
     return res.data;
   } catch (error) {
-    notify('error', 'User', 'Delete Failed!');
   }
 };
+
+export const updateUserApi = async (id: number, param: any) => {
+  try {
+    const res = await client.put(`user/${id}`, param);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const updateUserImage = async (id: number, file: any) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const res = await client.post('user/change-avatar/' + id, file, config);
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const changePassword = async (param: string) => {
+  try {
+    const res = await client.post(`auth/change-password`, param);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
