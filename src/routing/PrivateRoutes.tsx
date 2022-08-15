@@ -2,19 +2,18 @@ import React, { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import UserDetail from '../modules/admin/pages/manageUser/UserDetail';
-import Profile from '../modules/auth/component/Profile';
-import CustomerHomePage from '../modules/customer/pages/CustomerHomePage';
+import Login from '../modules/auth/component/Login';
 import GroupOrder from '../modules/customer/pages/groupOrder/GroupOrder.js';
 import HomePage from '../modules/public/HomePage';
+import CategoryPage from '../modules/public/CategoryPage';
+import ProductByCategory from '../modules/public/ProductByCategory';
+import SearchProduct from '../modules/public/SearchProduct';
 import ManageProduct from '../modules/vendor/pages/manageProduct/ManageProduct';
 import VendorHomePage from '../modules/vendor/pages/VendorHomePage';
 import { USER_ROLE } from '../shared/constant';
 import FallbackView from '../_metronic/partials/FallbackView';
-// import AdminHomePage from '../modules/admin/pages/AdminHomePage';
-// import AdminManageCategory from '../modules/admin/pages/manageCategory/ManageCategory';
-// import AdminManageUser from '../modules/admin/pages/manageUser/ManageUser';
-// import AdminManageVendor from '../modules/admin/pages/manageVendor/ManageVendor';
-// import { USER_ROLE } from '../shared/constant';
+import PersonalOrder from '../modules/customer/pages/groupOrder/PersonalOrder';
+import CustomerAccount from '../modules/customer/pages/CustomerAccount';
 
 const PrivateRoutes = () => {
   const AdminHomePage = lazy(
@@ -52,7 +51,7 @@ const PrivateRoutes = () => {
               <Route path="manage-vendor" element={<AdminManageVendor />} />
               <Route path="manage-user" element={<AdminManageUser />} />
               <Route path="manage-user/:id" element={<UserDetail />} />
-              <Route path="profile" element={<Profile />} />
+              {/* <Route path="profile" element={<Profile />} /> */}
             </Route>
           </Routes>
         );
@@ -60,18 +59,30 @@ const PrivateRoutes = () => {
       case USER_ROLE.VENDOR:
         return (
           <Routes>
-            <Route path="/" element={<VendorHomePage />}>
-              <Route path="manage-product" element={<ManageProduct />} />
-            </Route>
+            <Route path="" element={<VendorHomePage />} />
           </Routes>
         );
       case USER_ROLE.CUSTOMER:
         return (
           <Routes>
-            <Route path="/group-order" element={<GroupOrder />} />
-            <Route path="/home" element={<HomePage />} />
+            <Route path="" element={<HomePage />} />
+            <Route path="/account" element={<CustomerAccount />} />
+            <Route path="/category" element={<CategoryPage />} />
+            <Route path="/product/search" element={<SearchProduct />} />
+            <Route
+              path="/product/category/:title"
+              element={<ProductByCategory />}
+            />
+            <Route path="/group-order/vendor/:id" element={<GroupOrder />} />
+            <Route path="/order/vendor/:id" element={<PersonalOrder />} />
           </Routes>
         );
+      // default:
+      //   return (
+      //     <Routes>
+      //       <Route path="/" element={<Login />} />
+      //     </Routes>
+      //   );
       //   default:
       //     return (
       //       <Routes>
@@ -82,18 +93,7 @@ const PrivateRoutes = () => {
   };
   return (
     <div>
-      <Suspense fallback={<FallbackView />}>
-        {renderByRole()}
-        {/* <Routes>
-            <Route path='/home' element={<AdminHomePage />}>
-                <Route path='manage-category' element={<AdminManageCategory />}/>
-                <Route path='manage-vendor' element={<AdminManageVendor />}/>
-                <Route path='manage-user' element={<AdminManageUser />} />
-                <Route path='manage-user/:id' element={<UserDetail />} />
-                <Route path='profile' element={<Profile />} />
-            </Route>
-        </Routes> */}
-      </Suspense>
+      <Suspense fallback={<FallbackView />}>{renderByRole()}</Suspense>
     </div>
   );
 };

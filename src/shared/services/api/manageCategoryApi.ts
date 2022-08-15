@@ -17,6 +17,18 @@ export const getListCategoryApi = async() => {
     }
 }
 
+export const getAllCategoryApi = async() => {
+    
+    try {
+        const res = await client.get('category?page=0&page_size=50')
+        return res.data
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+
 export const postCategoryApi = async(param: ICategory) => {
     try {
         const res = await client.post('category', param)
