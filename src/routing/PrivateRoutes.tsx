@@ -17,6 +17,7 @@ import CustomerAccount from '../modules/customer/pages/CustomerAccount';
 import ProductReview from '../modules/public/ProductReview';
 import SignupUser from '../modules/public/SignupUser';
 import SignupVendor from '../modules/public/SignupVendor';
+import AdminStatistics from '../modules/public/AdminStatistics';
 
 const PrivateRoutes = () => {
   const AdminHomePage = lazy(
@@ -48,7 +49,8 @@ const PrivateRoutes = () => {
               <Route path="manage-vendor" element={<AdminManageVendor />} />
               <Route path="manage-user" element={<AdminManageUser />} />
               <Route path="manage-user/:id" element={<UserDetail />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="statistics" element={<AdminStatistics />} />
+              <Route path="login" element={<Login />} />
             </Route>
           </Routes>
         );
