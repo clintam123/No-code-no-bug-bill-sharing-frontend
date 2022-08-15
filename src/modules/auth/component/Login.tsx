@@ -75,7 +75,7 @@ const Login = () => {
           )}
 
           <div className="fv-row mb-10">
-            <label className="form-label font-bolder text-dark">Email</label>
+            <label className="form-label font-bolder text-dark">Username</label>
             <input
               placeholder="Email"
               {...formik.getFieldProps('username')}

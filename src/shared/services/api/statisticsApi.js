@@ -27,7 +27,7 @@ export const vendorGetOrdersByDate = async (vendorId, startDate, endDate) => {
   }
 }
 
-export const getOrdersByDate = async (vendorId, startDate, endDate) => {
+export const vendorGetRevenueByDate = async (vendorId, startDate, endDate) => {
   try {
     const res = await client.get(`statistics/revenue-vendor/${vendorId}?start_date=${startDate}&end_date=${endDate}`)
     return res.data;

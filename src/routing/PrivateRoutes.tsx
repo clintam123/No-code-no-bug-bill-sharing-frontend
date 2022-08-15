@@ -18,6 +18,7 @@ import ProductReview from '../modules/public/ProductReview';
 import SignupUser from '../modules/public/SignupUser';
 import SignupVendor from '../modules/public/SignupVendor';
 import AdminStatistics from '../modules/public/AdminStatistics';
+import VendorStatistics from '../modules/public/VendorStatistics';
 
 const PrivateRoutes = () => {
   const AdminHomePage = lazy(
@@ -60,6 +61,7 @@ const PrivateRoutes = () => {
           <Routes>
             <Route path="" element={<VendorHomePage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/statistics" element={<VendorStatistics />} />
           </Routes>
         );
       case USER_ROLE.CUSTOMER:
