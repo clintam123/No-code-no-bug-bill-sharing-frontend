@@ -87,18 +87,18 @@ export const seachProductApi = async (param: any) => {
     const res = await client.post(`product/filter?page=0&page_size=50`, param);
     return res.data;
   } catch (error) {
-    notify('error', 'Group Product', 'Get List Product-Group Failed!');
+    console.log(error);
   }
 };
 
-export const updateProductImage = async (id:any, file: any) => {
+export const updateProductImage = async (id: any, file: any) => {
   try {
     const config = {
       headers: {
-          'Content-Type': 'multipart/form-data',
-      }
-  }
-    const res = await client.post('product/update-image/'  + id, file, config);
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const res = await client.post('product/update-image/' + id, file, config);
     return res.data;
   } catch (err) {
     console.error(err);
@@ -107,12 +107,14 @@ export const updateProductImage = async (id:any, file: any) => {
 
 export const getProductReviewApi = async (id: any) => {
   try {
-    const res = await client.get(`product-review/product/${id}?page=0&page_size=50`);
+    const res = await client.get(
+      `product-review/product/${id}?page=0&page_size=50`
+    );
     return res.data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export const postProductReviewApi = async (id: any, param: any) => {
   try {
@@ -120,8 +122,8 @@ export const postProductReviewApi = async (id: any, param: any) => {
     return res.data;
   } catch (error) {
     console.error(error);
-  } 
-}
+  }
+};
 
 export const putProductReviewApi = async (id: any, param: any) => {
   try {
@@ -129,8 +131,8 @@ export const putProductReviewApi = async (id: any, param: any) => {
     return res.data;
   } catch (error) {
     console.error(error);
-  } 
-}
+  }
+};
 
 export const deleteProductReviewApi = async (id: any) => {
   try {
@@ -138,5 +140,5 @@ export const deleteProductReviewApi = async (id: any) => {
     return res.data;
   } catch (error) {
     console.error(error);
-  } 
-}
+  }
+};

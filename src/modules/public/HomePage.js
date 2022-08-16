@@ -117,6 +117,9 @@ const HomePage = () => {
       <div className="container mt-4">
         <p className="fs-5 fw-bold">CHỌN THEO THỂ LOẠI</p>
         <div className="row">{displayCategories(categories)}'</div>
+        <a href="/category">
+          <button className="btn btn-primary">Xem tất cả thẻ loại</button>
+        </a>
       </div>
       <div className="px-3  container">
         <hr className="text-danger" />
