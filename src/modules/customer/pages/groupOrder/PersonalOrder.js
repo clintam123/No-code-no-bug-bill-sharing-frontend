@@ -5,6 +5,7 @@ import groupOrderService from '../../../../shared/services/api/groupOrderApi';
 import { postOrder } from '../../../../shared/services/api/personalOrderApi';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from '../../../public/Navbar';
 
 const PersonalOrder = () => {
   const [productGroup, setProductGroup] = useState([]);
@@ -28,6 +29,7 @@ const PersonalOrder = () => {
   const getProductGroups = async () => {
     try {
       const data = await groupOrderService.getProductGroup(vendor_id);
+      console.log(data.data.data);
       setProductGroup([...data.data.data]);
       console.log(data);
     } catch (err) {
@@ -142,7 +144,7 @@ const PersonalOrder = () => {
             <div className="card-body ml-5">
               <div className="row">
                 <div className="col ml-5">
-                  <h5 className="card-title">{vendor.profile}</h5>
+                  <h5 className="card-title">{vendor.intro}</h5>
                   <p className="card-text">
                     🏠 Địa chỉ:
                     {vendor.address +
@@ -180,6 +182,7 @@ const PersonalOrder = () => {
   const displayProductGroups = (data) => {
     const listProductGroups = data.map((productGroup, index) => (
       <div className="row">
+        <div>{productGroup.name}</div>
         {productGroup.product_list.map((product, index) => (
           <div className="card mb-3" key={index}>
             <div className="row g-0">
@@ -339,6 +342,7 @@ const PersonalOrder = () => {
 
   return (
     <div>
+      <Navbar />
       {vendor != null && displayVendor(vendor)}
       <div className="container-xxl">
         <div className="row mt-5 mb-5">

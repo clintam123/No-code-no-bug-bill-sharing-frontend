@@ -8,6 +8,7 @@ import {
 } from '../../../shared/services/api/manageUserApi';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from '../../public/Navbar';
 
 const CustomerAccount = () => {
   const userRedux = useSelector((state) => state.auth.user);
@@ -25,20 +26,30 @@ const CustomerAccount = () => {
 
   const updateUserImageForm = () => {
     return (
-      <div>
+      <div className="col-5 mt-5">
+        <img src={user.image_url} alt="User" width="200px" />
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            updateUserImage(user.id, {
+            await updateUserImage(user.id, {
               file: e.target.userImage.files[0],
             });
             window.location.reload();
           }}
         >
-          <label for="userImage">Select User Image:</label>
-          <input type="file" id="userImage" name="userImage" />
+          <div className="mb-3 mt-4">
+            <label for="formFile" className="form-label">
+              Select User Image:
+            </label>
+            <input
+              type="file"
+              className="form-control text-success"
+              id="userImage"
+              name="userImage"
+            />
+          </div>
           <br />
-          <input type="submit" className="btn btn-primary" />{' '}
+          <input type="submit" className="btn btn-success" />{' '}
         </form>
       </div>
     );
@@ -46,20 +57,41 @@ const CustomerAccount = () => {
 
   const displayUser = () => {
     return (
-      <div>
-        <div>Username: {user.username}</div>
-        <div>First name: {user.first_name}</div>
-        <div>Last name: {user.last_name}</div>
-        <div>{user.phone}</div>
-        <div>{user.email}</div>
+      <div className="col-5 mt-4">
         <img src={user.image_url} alt="User" width="200px" />
+        <div className="form-group mb-3">
+          <label>Username</label>
+          <div className="form-control mt-2">{user.username} </div>
+        </div>
+
+        <div className="form-group mb-3">
+          <label>Username</label>
+          <div className="form-control mt-2">{user.username} </div>
+        </div>
+
+        <div className="form-group mb-3">
+          <label>Firstname</label>
+          <div className="form-control mt-2">{user.first_name} </div>
+        </div>
+        <div className="form-group mb-3">
+          <label>Lastname</label>
+          <div className="form-control mt-2">{user.last_name} </div>
+        </div>
+        <div className="form-group mb-3">
+          <label>Phone</label>
+          <div className="form-control mt-2">{user.phone} </div>
+        </div>
+        <div className="form-group mb-3">
+          <label>Email</label>
+          <div className="form-control mt-2">{user.email} </div>
+        </div>
       </div>
     );
   };
 
   const updateInfo = () => {
     return (
-      <div>
+      <div className="col-5">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -72,14 +104,58 @@ const CustomerAccount = () => {
             window.location.reload();
           }}
         >
-          First name: <input type="text" name="first_name" /> <br />
-          Last name: <input type="text" name="last_name" />
-          <br />
-          Phone: <input type="text" name="phone" />
-          <br />
-          Email: <input type="text" name="email" />
-          <br />
-          <input type="submit" className="btn btn-primary" />
+          <div className="form-group mb-3 mt-3">
+            <label>Username: </label>
+            <input
+              type="text"
+              className="form-control mt-2"
+              name="username"
+              defaultValue={user.username}
+              disabled
+            />
+          </div>
+
+          <div className="form-group mb-3 mt-3">
+            <label>Firstname: </label>
+            <input
+              type="text"
+              className="form-control mt-2"
+              name="first_name"
+              defaultValue={user.first_name}
+            />
+          </div>
+
+          <div className="form-group mb-3 mt-3">
+            <label>Lastname: </label>
+            <input
+              type="text"
+              className="form-control mt-2"
+              name="last_name"
+              defaultValue={user.last_name}
+            />
+          </div>
+
+          <div className="form-group mb-3 mt-3">
+            <label>Phone: </label>
+            <input
+              type="text"
+              className="form-control mt-2"
+              name="phone"
+              defaultValue={user.phone}
+            />
+          </div>
+
+          <div className="form-group mb-3 mt-3">
+            <label>Email: </label>
+            <input
+              type="text"
+              className="form-control mt-2"
+              name="email"
+              defaultValue={user.email}
+            />
+          </div>
+
+          <input type="submit" className="btn btn-success mb-5" />
           <br />
         </form>
       </div>
@@ -88,7 +164,7 @@ const CustomerAccount = () => {
 
   const changePasswordForm = () => {
     return (
-      <div>
+      <div className="mb-3">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -100,14 +176,33 @@ const CustomerAccount = () => {
             alert('Đổi mật khẩu thành công');
           }}
         >
-          Current Password: <input type="password" name="currentPassword" />
-          <br />
-          New Password: <input type="password" name="newPassword" />
-          <br />
-          New Password Confirm:{' '}
-          <input type="password" name="newPasswordConfirm" />
-          <br />
-          <input type="submit" className="btn btn-primary" />
+          <div className="form-group mb-3 mt-3">
+            <label>Current Password: </label>
+            <input
+              type="password"
+              className="form-control mt-2"
+              name="currentPassword"
+            />
+          </div>
+
+          <div className="form-group mb-3 mt-3">
+            <label>New Password: </label>
+            <input
+              type="password"
+              className="form-control mt-2"
+              name="newPassword"
+            />
+          </div>
+
+          <div className="form-group mb-3 mt-3">
+            <label>New Password Confirm: : </label>
+            <input
+              type="password"
+              className="form-control mt-2"
+              name="newPasswordConfirm"
+            />
+          </div>
+          <input type="submit" className="btn btn-success" />
           <br />
         </form>
       </div>
@@ -116,10 +211,32 @@ const CustomerAccount = () => {
 
   return (
     <div>
-      {user != null && displayUser()}
-      {updateUserImageForm()}
-      {updateInfo()}
-      {changePasswordForm()}
+      <Navbar />
+      <div className="container">
+        <div className="row">
+          <div className="card mt-3">
+            <div className="row">
+              <h5 className="card-header text-center bg-success text-white">
+                Cập Nhật thông tin tài khoản
+              </h5>
+              <div className="col-1"></div>
+              {user != null && updateInfo()}
+              {user != null && updateUserImageForm()}
+              <div className="col-1"></div>
+            </div>
+          </div>
+        </div>
+        <div className="row mb-5 mt-5">
+          <div className="card">
+            <div className="row">
+              <h5 className="card-header bg-success text-white text-center">
+                Cập nhật mật khẩu
+              </h5>
+              {changePasswordForm()}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

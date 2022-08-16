@@ -46,6 +46,7 @@ const PrivateRoutes = () => {
         return (
           <Routes>
             <Route path="/" element={<AdminHomePage />}>
+              <Route path="account" element={<CustomerAccount />} />
               <Route path="manage-category" element={<AdminManageCategory />} />
               <Route path="manage-vendor" element={<AdminManageVendor />} />
               <Route path="manage-user" element={<AdminManageUser />} />
@@ -60,6 +61,7 @@ const PrivateRoutes = () => {
         return (
           <Routes>
             <Route path="" element={<VendorHomePage />} />
+            <Route path="/account" element={<CustomerAccount />} />
             <Route path="/login" element={<Login />} />
             <Route path="/statistics" element={<VendorStatistics />} />
           </Routes>

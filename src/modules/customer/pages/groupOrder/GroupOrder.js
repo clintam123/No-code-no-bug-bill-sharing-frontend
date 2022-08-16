@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { client } from '@stomp/stompjs';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import groupOrderService from '../../../../shared/services/api/groupOrderApi';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Navbar from '../../../public/Navbar';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -148,7 +148,7 @@ const GroupOrder = () => {
             <div className="card-body ml-5">
               <div className="row">
                 <div className="col ml-5">
-                  <h5 className="card-title">{vendor.profile}</h5>
+                  <h5 className="card-title">{vendor.intro}</h5>
                   <p className="card-text">
                     🏠 Địa chỉ:
                     {vendor.address +
@@ -186,6 +186,7 @@ const GroupOrder = () => {
   const displayProductGroups = (data) => {
     const listProductGroups = data.map((productGroup, index) => (
       <div className="row">
+        <div>{productGroup.name}</div>
         {productGroup.product_list.map((product, index) => (
           <div className="card mb-3" key={index}>
             <div className="row g-0">
@@ -350,6 +351,7 @@ const GroupOrder = () => {
 
   return (
     <div>
+      <Navbar />
       {vendor != null && displayVendor(vendor)}
       <div className="container-xxl">
         <div className="row mt-5 mb-5">

@@ -16,10 +16,8 @@ import {
   updateProductImage,
 } from '../../../shared/services/api/manageProductApi';
 import { getAllCategoryApi } from '../../../shared/services/api/manageCategoryApi';
-import {
-  updateVendorImage,
-  updateVendorInfoApi,
-} from '../../../shared/services/api/manageVendorApi';
+import { updateVendorImage } from '../../../shared/services/api/manageVendorApi';
+import Navbar from '../../public/Navbar';
 
 const VendorHomePage = () => {
   const [vendor, setVendor] = useState(null);
@@ -27,7 +25,6 @@ const VendorHomePage = () => {
   const [categories, setCategories] = useState([]);
 
   const vendorId = useSelector((state) => state.auth.user.vendorId);
-  const userId = useSelector((state) => state.auth.user.id);
 
   useEffect(() => {
     getProductGroups();
@@ -67,7 +64,7 @@ const VendorHomePage = () => {
       <div className="container-xxl">
         <div className="row mt-5">
           <div className="card mb-3">
-            <img src={vendor.logo} alt="Logo" />
+            <img src={vendor.logo} alt="Logo" width="100%" />
             <div className="card-body ml-5">
               <div className="row">
                 <div className="col ml-5">
@@ -480,91 +477,6 @@ const VendorHomePage = () => {
     );
   };
 
-  // const displayProductGroups = (data) => {
-  //   const listProductGroups = data.map((productGroup, index) => (
-  //     <div class="container-xxl" key={index + 1}>
-  //       <div class="row mt-5">
-  //         <div class="col">
-  //           <div class="card mb-3">
-  //             {/* <img src="images/benner1.jpg" class="card-img-top" width="20px" alt="..."> */}
-  //             <div class="card-body">
-  //               <h5 class="card-title">{productGroup.name}</h5>
-  //               <p class="card-text">{productGroup.description}</p>
-  //               <p class="card-text">
-  //                 <small class="text-muted">Last updated 3 mins ago</small>
-  //               </p>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <div class="row mt-5 mb-5">
-  //         <div class="col-3">
-  //           <div class="card">
-  //             <ul class="list-group list-group-flush">
-  //               <li class="list-group-item">Món Ăn</li>
-  //               <li class="list-group-item">A second item</li>
-  //               <li class="list-group-item">A third item</li>
-  //               <li class="list-group-item">A fourth item</li>
-  //               <li class="list-group-item">And a fifth one</li>
-  //             </ul>
-  //           </div>
-  //         </div>
-  //         <div class="col-6">
-  //           <div class="row">
-  //             {productGroup.product_list.map((product, index) => (
-  //               <div class="card mb-3" key={index}>
-  //                 <div class="row g-0">
-  //                   <div class="col-md-3">
-  //                     <img
-  //                       src={product.image_url}
-  //                       alt="Product"
-  //                       width="200px"
-  //                     />
-  //                   </div>
-  //                   <div class="col-md-9">
-  //                     <div class="card-body">
-  //                       <h5 class="card-title">{product.title}</h5>
-  //                       <h6 class="card-text">{product.price}</h6>
-  //                       <p class="card-text">{product.description}</p>
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </div>
-  //             ))}
-  //           </div>
-  //         </div>
-  //         <div class="col-3">
-  //           <div class="card">
-  //             <div class="card-body">
-  //               <h5 class="card-title">Ưu Đãi</h5>
-  //               {/* <hr> */}
-  //               <p class="card-text"> Freeship đơn hàng dưới 2km</p>
-  //             </div>
-  //           </div>
-
-  //           <div class="card mt-3">
-  //             <div class="card-body my-0">
-  //               <div class="my-0">
-  //                 <p class="float-start">ĐƠN HÀNG CỦA BẠN</p>
-  //                 <button class="btn btn-success float-end">Đặt Nhóm</button>
-  //               </div>
-  //             </div>
-  //             <div class="card-body mt-0 my-0">
-  //               {/* <hr> */}
-  //               <p class="card-text text-center">
-  //                 {' '}
-  //                 Hãy chọn món yêu thích của bạn trên menu để đặt giao hàng
-  //                 ngay!
-  //               </p>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //     ));
-  //     return listProductGroups;
-  //   };
-
   const displayProductGroups = (data) => {
     const listProductGroups = data.map((productGroup, index) => (
       <div key={index + 1} className="card mt-3">
@@ -713,19 +625,21 @@ const VendorHomePage = () => {
     return (
       <div>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
             console.log(e.target.vendorImage.files[0]);
-            updateVendorImage(vendorId, {
+            await updateVendorImage(vendorId, {
               file: e.target.vendorImage.files[0],
             });
             window.location.reload();
           }}
         >
-          <label for="vendorImage">Select Vendor Image:</label>
-          <input type="file" id="vendorImage" name="vendorImage" />
-          <br />
-          <input type="submit" className="btn btn-primary" />
+          <div className="container">
+            <label for="vendorImage">Select Vendor Image:</label>
+            <input type="file" id="vendorImage" name="vendorImage" />
+            <br />
+            <input type="submit" className="btn btn-success" />
+          </div>
         </form>
       </div>
     );
@@ -735,78 +649,21 @@ const VendorHomePage = () => {
     return (
       <div>
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log(e.target.vendorImage.files[0]);
-            updateProductImage(id, {
-              file: e.target.vendorImage.files[0],
-            });
-            window.location.reload();
-          }}
-        >
-          <label for="productImage">Select Product Image:</label>
-          <input type="file" id="productImage" name="productImage" />
-          <br />
-          <input type="submit" className="btn btn-primary" />
-        </form>
-      </div>
-    );
-  };
-
-  const updateVendorInfoForm = () => {
-    return (
-      <div>
-        <form
           onSubmit={async (e) => {
             e.preventDefault();
-            await updateVendorInfoApi(vendorId, {
-              intro: e.target.intro.value,
-              profile: e.target.profile.value,
-              address: e.target.address.value,
-              district: e.target.district.value,
-              province: e.target.province.value,
-              opening_time: e.target.opening_time.value,
-              closing_time: e.target.closing_time.value,
-              phone: e.target.phone.value,
-              user_id: userId,
+            console.log(e.target.productImage.files[0]);
+            await updateProductImage(id, {
+              file: e.target.productImage.files[0],
             });
             window.location.reload();
           }}
         >
-          Tên: <input type="text" name="intro" defaultValue={vendor.intro} />{' '}
-          <br />
-          Mô tả chi tiêt:{' '}
-          <input type="text" name="profile" defaultValue={vendor.profile} />
-          <br />
-          Địa chỉ:
-          <input type="text" name="address" defaultValue={vendor.address} />
-          <br />
-          Quận:{' '}
-          <input type="text" name="district" defaultValue={vendor.district} />
-          <br />
-          Tỉnh:{' '}
-          <input type="text" name="province" defaultValue={vendor.province} />
-          <br />
-          Giờ mở cửa:{' '}
-          <input
-            type="text"
-            name="opening_time"
-            defaultValue={vendor.opening_time}
-          />
-          <br />
-          Giờ đóng cửa:{' '}
-          <input
-            type="text"
-            name="closing_time"
-            defaultValue={vendor.closing_time}
-          />
-          <br />
-          Số điện thoại:{' '}
-          <input type="text" name="phone" defaultValue={vendor.phone} />
-          <br />
-          <button type="submit" className="btn btn-primary">
-            Thay đổi info
-          </button>
+          <div className="mx-5">
+            <label for="productImage">Select Product Image:</label>
+            <input type="file" id="productImage" name="productImage" />
+            <br />
+            <input type="submit" className="btn btn-success mt-1" />
+          </div>
         </form>
       </div>
     );
@@ -814,11 +671,11 @@ const VendorHomePage = () => {
 
   return (
     <div>
+      <Navbar />
       {vendor != null && displayVendor(vendor)}
       {updateVendorImageForm()}
-      {vendor != null && updateVendorInfoForm()}
 
-      <div className="container">
+      <div className="container mt-5">
         <div className="row">
           {addProductGroup()}
           {displayProductGroups(productGroup)}

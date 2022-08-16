@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 // import { alertError } from '../../../shared/toastify';
 import { IUser } from '../../../setup/redux/State';
 import { login } from '../../../shared/services/api/authApi';
+import Navbar from '../../public/Navbar';
 import { actionLoginSuccess } from '../redux/AuthActions';
 
 const loginSchema = Yup.object().shape({
@@ -55,6 +56,7 @@ const Login = () => {
   });
   return (
     <div>
+      <Navbar />
       <button
         className="rounded-[5px] bg-gray-700 px-10 text-white font-black text-[20px]"
         onClick={showModal}

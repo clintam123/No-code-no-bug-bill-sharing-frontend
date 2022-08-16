@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import homePageService from '../../shared/services/api/homePageApi';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from './Navbar';
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [vendors, setVendors] = useState([]);
@@ -33,7 +34,10 @@ const HomePage = () => {
   const displayCategories = (categories) => {
     const listCategories = categories.map((category, index) => (
       <div className="px-3 col-2">
-        <a href={`/product/category/${category.title}`}>
+        <a
+          className="text-decoration-none text-black"
+          href={`/product/category/${category.title}`}
+        >
           <div className=" ">
             <img
               src={category.image_url}
@@ -90,8 +94,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <a href="/product/search">Tìm kiếm sản phẩm</a>
-      <a href="/account">Quản lí tài khoản</a>
+      <Navbar />
       <div class=" ">
         <img
           className="card-img"
@@ -102,13 +105,9 @@ const HomePage = () => {
           <div className="col-3"></div>
           <center className="col-6">
             <div class="input-group">
-              <input
-                type="text"
-                class="form-control rounded-pill"
-                placeholder="Tìm quán ăn, trà sữa yêu thích "
-                aria-label="search"
-                aria-describedby="basic-addon1"
-              />
+              <a href="/product/search">
+                <button className="btn btn-primary">Tìm món ăn</button>
+              </a>
             </div>
           </center>
           <div className="col-3"></div>

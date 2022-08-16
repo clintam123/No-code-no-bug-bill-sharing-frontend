@@ -56,34 +56,39 @@ const SearchProduct = () => {
           <option value="2">Discount</option>
         </select>
         <br />
-        <button type="submit">Tìm kiếm</button>
+        <button type="submit" className="btn btn-success">
+          Tìm kiếm
+        </button>
       </form>
     );
   };
 
   const displayProducts = (products) => {
     const listProducts = products.map((product, index) => (
-      <div key={index} className="px-3 col-2">
-        <a href={`../order/vendor/${product.vendor_id}`}>
+      <div key={index} className="px-3 col-2  card mx-3">
+        <a
+          className="text-decoration-none text-black"
+          href={`../order/vendor/${product.vendor_id}`}
+        >
           <div className=" ">
             <img
               src={product.product_image}
               alt="Product"
-              className=""
+              className="card-img-top mt-3"
               width="70%"
             />
             <div className="card-body">
-              <h5 className="card-title">{product.product_name}</h5>
-              <p className="card-text">{product.description}</p>
-              <p className="card-text">{product.price}đ</p>
+              <h5 className="card-title">🍥Tên: {product.product_name}</h5>
+              <p className="card-text">📝Mô tả: {product.description}</p>
+              <p className="card-text">💰Giá: {product.price}đ</p>
             </div>
             <img
               src={product.vendor_logo}
               alt="Vendor"
-              className=""
+              className="mt-3 card-img-top"
               width="70%"
             />
-            <p className="card-text">{product.vendor}</p>
+            <p className="card-text">📞Vendor:{product.vendor}</p>
           </div>
         </a>
       </div>
@@ -93,8 +98,11 @@ const SearchProduct = () => {
 
   return (
     <div>
-      {searchBar()}
-      {displayProducts(products)}
+      <div className="container mt-4">
+        {searchBar()}
+        <hr />
+        <div className="row">{displayProducts(products)}</div>
+      </div>
     </div>
   );
 };
