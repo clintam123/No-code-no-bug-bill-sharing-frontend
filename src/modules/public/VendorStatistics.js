@@ -14,7 +14,7 @@ const VendorStatistics = () => {
 
   const getAllOrders = () => {
     return (
-      <div>
+      <div className="col-12">
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -27,15 +27,28 @@ const VendorStatistics = () => {
             setOrders([...data.data]);
           }}
         >
-          Ngày bắt đầu:
-          <input type="date" name="startDate" />
-          <br />
-          Ngày kết thúc:
-          <input type="date" name="endDate" />
-          <br />
-          <button type="submit" className="btn btn-primary">
-            Xem tất cả order
-          </button>
+          <div className="row">
+            <div className="col-5"> </div>
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày bắt đầu:</label>
+                <input type="date" class="form-control" name="startDate" />
+              </div>
+            </div>
+
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày kết thúc:</label>
+                <input type="date" class="form-control" name="endDate" />
+              </div>
+            </div>
+
+            <div className="col-3 mt-4 mb-4">
+              <button type="submit" className="btn btn-success">
+                Xem tất cả order
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     );
@@ -44,23 +57,17 @@ const VendorStatistics = () => {
   const displayOrders = () => {
     const listOrders = orders.map((order, index) => {
       return (
-        <div>
-          <div>Khách hàng: {order.fullname}</div>
-          <br />
-          <div>Username: {order.username}</div>
-          <br />
-          <div>Discount: {order.discount}</div>
-          <br />
-          <div>Shipping: {order.shipping}</div>
-          <br />
-          <div>Tổng tiền: {order.grand_total}</div>
-          <br />
-          <div>Tạo lúc: {order.created_at}</div>
-          <br />
-          <div>Thay đổi lúc: {order.updated_at}</div>
-          <br />
-          <hr />
-        </div>
+        <tbody>
+          <tr>
+            <td>{order.fullname}</td>
+            <td>{order.username}</td>
+            <td>{order.discount}</td>
+            <td>{order.shipping}</td>
+            <td>{order.grand_total}</td>
+            <td>{order.created_at}</td>
+            <td>{order.updated_at}</td>
+          </tr>
+        </tbody>
       );
     });
     return listOrders;
@@ -81,26 +88,61 @@ const VendorStatistics = () => {
             setRevenues(data.data.grand_total);
           }}
         >
-          Ngày bắt đầu:
-          <input type="date" name="startDate" />
-          <br />
-          Ngày kết thúc:
-          <input type="date" name="endDate" />
-          <br />
-          <button type="submit" className="btn btn-primary">
-            Xem tất cả doanh thu
-          </button>
+          <div className="row">
+            <div className="col-5"> </div>
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày bắt đầu:</label>
+                <input type="date" class="form-control" name="startDate" />
+              </div>
+            </div>
+
+            <div className="col-2">
+              <div class="form-group">
+                <label>Ngày kết thúc:</label>
+                <input type="date" class="form-control" name="endDate" />
+              </div>
+            </div>
+
+            <div className="col-3 mt-4 mb-4">
+              <button type="submit" className="btn btn-success">
+                Xem doanh thu
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     );
   };
 
   return (
-    <div>
-      {getAllOrders()}
-      {displayOrders()}
-      {getRevenue()}
+    <div className="container">
+      <div className="row  mt-5">
+        {getRevenue()}
+      </div>
+
       <div>Doanh thu: {revenues}</div>
+      <hr/>
+      <div className="row">
+        {getAllOrders()}
+      </div>
+      <div className="row">
+        <table className="table table-bordered border-success table-striped table-hover">
+          <thead className="bg-success text-white">
+            <tr>
+              <th>Khách hàng</th>
+              <th>Tài khoản</th>
+              <th>Giảm Giá</th>
+              <th>Tiền Shipping</th>
+              <th>Tổng tiền</th>
+              <th>Tạo lúc</th>
+              <th>Thay đổi lúc</th>
+            </tr>
+          </thead>
+          {displayOrders()}
+        </table>
+      </div>
+
     </div>
   );
 };
