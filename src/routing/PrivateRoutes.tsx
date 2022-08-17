@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import UserDetail from '../modules/admin/pages/manageUser/UserDetail';
 import Login from '../modules/auth/component/Login';
-import GroupOrder from '../modules/customer/pages/groupOrder/GroupOrder.js';
+import GroupOrder from '../modules/customer/pages/groupOrder/GroupOrder';
 import HomePage from '../modules/public/HomePage';
 import CategoryPage from '../modules/public/CategoryPage';
 import ProductByCategory from '../modules/public/ProductByCategory';

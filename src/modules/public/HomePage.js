@@ -9,7 +9,21 @@ const HomePage = () => {
   useEffect(() => {
     getCategories();
     getVendors();
+    getLocation();
   }, []);
+
+  const getLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      alert('Geolocation is not supported by this browser.');
+    }
+
+    function showPosition(position) {
+      localStorage.setItem('latitude', position.coords.latitude);
+      localStorage.setItem('longitude', position.coords.longitude);
+    }
+  };
 
   const getCategories = async () => {
     try {
@@ -33,7 +47,7 @@ const HomePage = () => {
 
   const displayCategories = (categories) => {
     const listCategories = categories.map((category, index) => (
-      <div className="px-3 col-2">
+      <div key={index} className="px-3 col-2">
         <a
           className="text-decoration-none text-black"
           href={`/product/category/${category.title}`}
@@ -58,7 +72,7 @@ const HomePage = () => {
 
   const displayVendors = (vendors) => {
     const listVendors = vendors.map((vendor, index) => (
-      <div className="px-3 col-3">
+      <div key={index} className="px-3 col-3">
         <div className=" ">
           <div className="px-3">
             <div>
@@ -101,7 +115,7 @@ const HomePage = () => {
           src="https://loship.vn/dist/images/home-banner-18062021.jpg"
           alt="banner"
         ></img>
-        <div class="row">
+        <div className="row">
           <div className="col-3"></div>
           <center className="col-6">
             <div class="input-group">

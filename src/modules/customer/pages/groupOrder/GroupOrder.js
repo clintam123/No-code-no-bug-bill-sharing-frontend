@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Navbar from '../../../public/Navbar';
 
+import { getDistance } from '../../../../shared/services/api/personalOrderApi';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const GroupOrder = () => {
@@ -13,6 +15,7 @@ const GroupOrder = () => {
   const [productGroup, setProductGroup] = useState([]);
   const [order, setOrder] = useState(null);
   const [link, setLink] = useState('demo');
+  const [shipping, setShipping] = useState(null);
   const [stompClient, setStompClient] = useState();
 
   const vendor_id = useParams().id;
@@ -22,10 +25,24 @@ const GroupOrder = () => {
     getProductGroups();
     getVendor();
     setStompClient(Stomp.over(new SockJS('/ws')));
+    getShipping();
   }, []);
 
+  const getShipping = async () => {
+    const latitude = localStorage.getItem('latitude');
+    const longitude = localStorage.getItem('longitude');
+    const origin = latitude + ',' + longitude;
+    const res = await getDistance(origin, vendor_id);
+    console.log(res);
+    setShipping(res);
+  };
+
   const handleGetLink = async () => {
-    const newLink = await groupOrderService.getLink(user.id, vendor_id);
+    const newLink = await groupOrderService.getLink(
+      user.id,
+      vendor_id,
+      shipping.shipping
+    );
     setLink(newLink.link);
   };
 
@@ -144,7 +161,17 @@ const GroupOrder = () => {
       <div className="container-xxl">
         <div className="row mt-5">
           <div className="card mb-3">
-            <img src={vendor.logo} alt="Logo" />
+            <div className="row">
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+            </div>
             <div className="card-body ml-5">
               <div className="row">
                 <div className="col ml-5">
@@ -338,6 +365,18 @@ const GroupOrder = () => {
           </div>
         </div>
         <div className="row">
+          <div class="card-body p-0 mx-3 mt-2">
+            <h6 class="float-start">Khoảng cách :</h6>
+            <h6 class="float-end text-danger"> {shipping.length} đ</h6>
+          </div>
+        </div>
+        <div className="row">
+          <div class="card-body p-0 mx-3 mt-2">
+            <h6 class="float-start">Thời gian dự kiến :</h6>
+            <h6 class="float-end text-danger"> {shipping.time} đ</h6>
+          </div>
+        </div>
+        <div className="row">
           <div class="card-body p-0 mx-3 mt-2 mb-3">
             <h6 class="float-start">Tổng (Tạm tính) :</h6>
             <h6 class="float-end text-danger"> {order.grandTotal} đ</h6>
@@ -355,14 +394,7 @@ const GroupOrder = () => {
       {vendor != null && displayVendor(vendor)}
       <div className="container-xxl">
         <div className="row mt-5 mb-5">
-          <div className="col-2">
-            <div className="card">
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item">Bánh Bao</li>
-                <li className="list-group-item">Bánh bao trứng thịt</li>
-              </ul>
-            </div>
-          </div>
+          <div className="col-2"></div>
           <div className="col-6">{displayProductGroups(productGroup)}</div>
 
           <div className="col-4">

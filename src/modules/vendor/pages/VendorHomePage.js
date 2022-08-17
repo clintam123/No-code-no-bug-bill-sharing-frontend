@@ -64,7 +64,17 @@ const VendorHomePage = () => {
       <div className="container-xxl">
         <div className="row mt-5">
           <div className="card mb-3">
-            <img src={vendor.logo} alt="Logo" width="100%" />
+            <div className="row">
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+            </div>
             <div className="card-body ml-5">
               <div className="row">
                 <div className="col ml-5">

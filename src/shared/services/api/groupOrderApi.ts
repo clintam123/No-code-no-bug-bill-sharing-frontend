@@ -12,10 +12,11 @@ const getVendor = async (vendor_id: any) => {
   return response;
 };
 
-const getLink = async (userId: number, vendorId: number) => {
+const getLink = async (userId: number, vendorId: number, shipping: number) => {
   const response = await client.post('group-order/get-group-link', {
     userId,
     vendorId,
+    shipping
   });
   console.log(response);
   return response.data.data;

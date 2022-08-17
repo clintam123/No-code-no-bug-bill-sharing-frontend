@@ -9,6 +9,7 @@ const SignupVendor = () => {
     return (
       <div>
         <form
+          className="container mt-3 px-5"
           onSubmit={async (e) => {
             e.preventDefault();
             await postVendorApi({
@@ -25,23 +26,40 @@ const SignupVendor = () => {
             window.location.href = 'http://localhost:3000';
           }}
         >
-          Tên: <input type="text" name="intro" /> <br />
-          Mô tả chi tiêt: <input type="text" name="profile" />
+          <div class="mb-2 col-5">
+            <label class="form-label">Tên</label>
+            <input type="text" class="form-control col-3" name="intro" />
+          </div>
+          <div class="mb-2 col-5">
+            <label class="form-label">Mô tả chi tiêt</label>
+            <input type="text" class="form-control" name="profile" />
+          </div>
+          <div class="mb-2 col-5">
+            <label class="form-label">Địa chỉ</label>
+            <input type="text" class="form-control" name="address" />
+          </div>
+          <div class="mb-2 col-5">
+            <label class="form-label">Quận</label>
+            <input type="text" class="form-control" name="district" />
+          </div>
+          <div class="mb-2 col-5">
+            <label class="form-label">Tỉnh</label>
+            <input type="text" class="form-control" name="province" />
+          </div>
+          <div class="mb-2 col-5">
+            <label class="form-label">Giờ mở cửa</label>
+            <input type="text" class="form-control" name="opening_time" />
+          </div>
+          <div class="mb-2 col-5">
+            <label class="form-label">Giờ đóng cửa</label>
+            <input type="text" class="form-control" name="closing_time" />
+          </div>
+          <div class="mb-3 col-5">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" name="phone" />
+          </div>
           <br />
-          Địa chỉ:
-          <input type="text" name="address" />
-          <br />
-          Quận: <input type="text" name="district" />
-          <br />
-          Tỉnh: <input type="text" name="province" />
-          <br />
-          Giờ mở cửa: <input type="text" name="opening_time" />
-          <br />
-          Giờ đóng cửa: <input type="text" name="closing_time" />
-          <br />
-          Số điện thoại: <input type="text" name="phone" />
-          <br />
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-success">
             Signup Vendor
           </button>
         </form>

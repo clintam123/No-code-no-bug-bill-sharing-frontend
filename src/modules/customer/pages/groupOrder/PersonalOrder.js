@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import groupOrderService from '../../../../shared/services/api/groupOrderApi';
-import { postOrder } from '../../../../shared/services/api/personalOrderApi';
+import {
+  getDistance,
+  postOrder,
+} from '../../../../shared/services/api/personalOrderApi';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../../public/Navbar';
@@ -11,6 +14,7 @@ const PersonalOrder = () => {
   const [productGroup, setProductGroup] = useState([]);
   const [order, setOrder] = useState(null);
   const [vendor, setVendor] = useState(null);
+  const [shipping, setShipping] = useState(null);
 
   const vendor_id = useParams().id;
   const user = useSelector((state) => state.auth.user);
@@ -24,14 +28,22 @@ const PersonalOrder = () => {
     } else {
       localStorage.removeItem('order');
     }
+    getShipping();
   }, []);
+
+  const getShipping = async () => {
+    const latitude = localStorage.getItem('latitude');
+    const longitude = localStorage.getItem('longitude');
+    const origin = latitude + ',' + longitude;
+    const res = await getDistance(origin, vendor_id);
+    console.log(res);
+    setShipping(res);
+  };
 
   const getProductGroups = async () => {
     try {
       const data = await groupOrderService.getProductGroup(vendor_id);
-      console.log(data.data.data);
       setProductGroup([...data.data.data]);
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -41,7 +53,6 @@ const PersonalOrder = () => {
     try {
       const data = await groupOrderService.getVendor(vendor_id);
       setVendor(data.data.data);
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -69,8 +80,8 @@ const PersonalOrder = () => {
     if (order === null) {
       order = {
         status: 0,
-        shipping: 20000,
-        grandTotal: orderItem.total + 20000,
+        shipping: shipping.shipping,
+        grandTotal: orderItem.total + shipping.shipping,
         discount: 0,
         vendor_id: productGroup[0].vendor_id,
         user_id: user.id,
@@ -140,7 +151,17 @@ const PersonalOrder = () => {
       <div className="container-xxl">
         <div className="row mt-5">
           <div className="card mb-3">
-            <img src={vendor.logo} alt="Logo" />
+            <div className="row">
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+              <div className="col">
+                <img src={vendor.logo} alt="Logo" width="100%" />
+              </div>
+            </div>
             <div className="card-body ml-5">
               <div className="row">
                 <div className="col ml-5">
@@ -181,7 +202,7 @@ const PersonalOrder = () => {
 
   const displayProductGroups = (data) => {
     const listProductGroups = data.map((productGroup, index) => (
-      <div className="row">
+      <div key={index} className="row">
         <div>{productGroup.name}</div>
         {productGroup.product_list.map((product, index) => (
           <div className="card mb-3" key={index}>
@@ -241,7 +262,7 @@ const PersonalOrder = () => {
       <div>
         {order.order_items != null &&
           order.order_items.map((orderItem, index) => (
-            <div>
+            <div key={index}>
               <div className="row">
                 <div className="card-body p-0 mx-3 mb-2 ">
                   <h5 className="float-start text-danger">
@@ -329,6 +350,18 @@ const PersonalOrder = () => {
           </div>
         </div>
         <div className="row">
+          <div class="card-body p-0 mx-3 mt-2">
+            <h6 class="float-start">Khoảng cách :</h6>
+            <h6 class="float-end text-danger"> {shipping.length} đ</h6>
+          </div>
+        </div>
+        <div className="row">
+          <div class="card-body p-0 mx-3 mt-2">
+            <h6 class="float-start">Thời gian dự kiến :</h6>
+            <h6 class="float-end text-danger"> {shipping.time} đ</h6>
+          </div>
+        </div>
+        <div className="row">
           <div class="card-body p-0 mx-3 mt-2 mb-3">
             <h6 class="float-start">Tổng (Tạm tính) :</h6>
             <h6 class="float-end text-danger"> {order.grandTotal} đ</h6>
@@ -346,14 +379,7 @@ const PersonalOrder = () => {
       {vendor != null && displayVendor(vendor)}
       <div className="container-xxl">
         <div className="row mt-5 mb-5">
-          <div className="col-2">
-            <div className="card">
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item">Bánh Bao</li>
-                <li className="list-group-item">Bánh bao trứng thịt</li>
-              </ul>
-            </div>
-          </div>
+          <div className="col-2"></div>
           <div className="col-6">{displayProductGroups(productGroup)}</div>
 
           <div className="col-4">

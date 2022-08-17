@@ -78,7 +78,7 @@ export const getProductByCategoryApi = async (title: any) => {
     );
     return res.data;
   } catch (error) {
-    notify('error', 'Group Product', 'Get List Product-Group Failed!');
+    console.log(error);
   }
 };
 

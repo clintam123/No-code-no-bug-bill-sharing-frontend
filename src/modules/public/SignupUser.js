@@ -3,7 +3,7 @@ import { signup } from '../../shared/services/api/authApi';
 
 const SignupUser = () => {
   return (
-    <div>
+    <div className="container mt-3">
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -16,6 +16,7 @@ const SignupUser = () => {
             email: e.target.email.value,
             role: e.target.role.value,
           });
+          console.log(data);
           if (e.target.role.value == 'ROLE_CUSTOMER') {
             window.location.href = 'http://localhost:3000';
           } else if (e.target.role.value == 'ROLE_VENDOR') {
@@ -23,26 +24,42 @@ const SignupUser = () => {
           }
         }}
       >
-        Username: <input type="text" name="username" />
-        <br />
-        Password: <input type="text" name="password" />
-        <br />
-        First name:
-        <input type="text" name="first_name" />
-        <br />
-        Last name: <input type="text" name="last_name" />
-        <br />
-        Phone: <input type="text" name="phone" />
-        <br />
-        Email: <input type="text" name="email" />
-        <br />
+        <div class="mb-2 col-5">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" />
+        </div>
+        <div class="mb-2 col-5">
+          <label class="form-label">Password</label>
+          <input type="text" class="form-control" name="password" />
+        </div>
+        <div class="mb-2 col-5">
+          <label class="form-label">Password</label>
+          <input type="text" class="form-control" name="password" />
+        </div>
+        <div class="mb-2 col-5">
+          <label class="form-label">First name</label>
+          <input type="text" class="form-control" name="first_name" />
+        </div>
+        <div class="mb-2 col-5">
+          <label class="form-label">Last name</label>
+          <input type="text" class="form-control" name="last_name" />
+        </div>
+        <div class="mb-2 col-5">
+          <label class="form-label">Phone</label>
+          <input type="text" class="form-control" name="phone" />
+        </div>
+        <div class="mb-2 col-5">
+          <label class="form-label">Email</label>
+          <input type="text" class="form-control" name="email" />
+        </div>
         Role:{' '}
         <select name="role">
           <option value="ROLE_CUSTOMER">CUSTOMER</option>
           <option value="ROLE_VENDOR">VENDOR</option>
           <option value="ROLE_ADMIN">ADMIN</option>
         </select>
-        <button type="submit" className="btn btn-primary">
+        <br />
+        <button type="submit" className="btn btn-success mt-3">
           Signup
         </button>
       </form>
